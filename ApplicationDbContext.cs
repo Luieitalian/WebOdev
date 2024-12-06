@@ -42,6 +42,14 @@ namespace WebOdev
             modelBuilder.Entity<CalisanModel>()
                 .Property(c => c.DogumTarihi)
                 .HasColumnType("date");
+
+            modelBuilder.Entity<CalisanModel>()
+                .Property(c => c.Cinsiyet)
+                .HasConversion<int>(); // Enum as integer
+
+            //modelBuilder.Entity<IslemModel>()
+            //    .Property(c => c.Cinsiyet)
+            //    .HasConversion<int>(); // Enum as integer
         }
     }
 }

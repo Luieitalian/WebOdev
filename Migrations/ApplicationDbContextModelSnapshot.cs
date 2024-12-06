@@ -52,9 +52,8 @@ namespace WebOdev.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Cinsiyet")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Cinsiyet")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("DogumTarihi")
                         .HasColumnType("date");

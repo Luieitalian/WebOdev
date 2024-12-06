@@ -15,7 +15,7 @@ namespace WebOdev.Models
         public DateTime DogumTarihi { get; set; }
 
         public string Telefon { get; set; }
-        public string Cinsiyet { get; set; }
+        public CinsiyetEnum Cinsiyet { get; set; }
 
         [ValidateNever]
         public ICollection<CalisanIslemModel> CalisanIslemleri { get; set; }

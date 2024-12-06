@@ -12,8 +12,8 @@ using WebOdev;
 namespace WebOdev.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241206222527_DogumTarihiDuzenle2")]
-    partial class DogumTarihiDuzenle2
+    [Migration("20241206225911_AddNewCinsiyetColumn")]
+    partial class AddNewCinsiyetColumn
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,9 +55,8 @@ namespace WebOdev.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Cinsiyet")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Cinsiyet")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("DogumTarihi")
                         .HasColumnType("date");

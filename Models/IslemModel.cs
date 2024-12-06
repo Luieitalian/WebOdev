@@ -11,6 +11,7 @@ namespace WebOdev.Models
         public string Aciklama { get; set; }
         public TimeSpan Uzunluk { get; set; }
         public int Ucret { get; set; }
+
         public string Cinsiyet { get; set; }
 
         [ValidateNever]
