@@ -1,0 +1,44 @@
+﻿@model WebOdev.Models.CalisanModel
+
+@{
+    ViewData["Title"] = "Çalışan Ekle";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Isim" class="control-label">İsim</label>
+        <input asp-for="Isim" class="form-control" />
+        <span asp-validation-for="Isim" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Soyisim" class="control-label">Soyisim</label>
+        <input asp-for="Soyisim" class="form-control" />
+        <span asp-validation-for="Soyisim" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DogumTarihi.Date" class="control-label">Doğum Tarihi</label>
+        <input asp-for="DogumTarihi.Date" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" />
+        <span asp-validation-for="DogumTarihi.Date" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Telefon" class="control-label">Telefon</label>
+        <input asp-for="Telefon" class="form-control" />
+        <span asp-validation-for="Telefon" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Cinsiyet" class="control-label">Cinsiyet</label>
+        <input asp-for="Cinsiyet" class="form-control" />
+        <span asp-validation-for="Cinsiyet" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
