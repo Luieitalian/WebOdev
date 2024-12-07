@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Kayıt Ol";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form action="@Url.Action("KayitOl", "Kayit")" method="post">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="password">Şifre</label>
+        <input type="password" id="password" name="password" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="confirmPassword">Şifreyi Onayla</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+</form>
+
+<p>
+    Zaten bir hesabınız var mı? <a href="@Url.Action("Index", "Giris")">Buradan giriş yapabilirsiniz.</a>
+</p>
+
+<!-- Display Validation Summary (if any) -->
+@Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })

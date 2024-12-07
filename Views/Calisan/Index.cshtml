@@ -22,12 +22,12 @@
         @foreach (var calisan in Model)
         {
             <tr>
-                <td>@calisan.Id</td>
-                <td>@calisan.Isim</td>
-                <td>@calisan.Soyisim</td>
-                <td>@calisan.DogumTarihi.ToString("yyyy-MM-dd")</td>
-                <td>@calisan.Telefon</td>
-                <td>@calisan.Cinsiyet.ToString()</td>
+                <td>@calisan.Kullanici.Id</td>
+                <td>@calisan.Kullanici.Isim</td>
+                <td>@calisan.Kullanici.Soyisim</td>
+                <td>@calisan.Kullanici.DogumTarihi.ToString("yyyy-MM-dd")</td>
+                <td>@calisan.Kullanici.PhoneNumber</td>
+                <td>@calisan.Kullanici.Cinsiyet.ToString()</td>
             </tr>
         }
     </tbody>

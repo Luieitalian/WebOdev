@@ -1,4 +1,4 @@
-﻿@model WebOdev.Models.CalisanModel
+﻿@model WebOdev.Models.KullaniciEkleViewModel
 
 @{
     ViewData["Title"] = "Çalışan Ekle";
@@ -6,7 +6,8 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="Create" method="post">
+<form action="Create" method="post">
+    @Html.AntiForgeryToken()
     <div class="form-group">
         <label asp-for="Isim" class="control-label">İsim</label>
         <input asp-for="Isim" class="form-control" />
@@ -16,6 +17,16 @@
         <label asp-for="Soyisim" class="control-label">Soyisim</label>
         <input asp-for="Soyisim" class="form-control" />
         <span asp-validation-for="Soyisim" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email" class="control-label">Email</label>
+        <input asp-for="Email" type="email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Sifre" class="control-label">Sifre</label>
+        <input asp-for="Sifre" type="password" class="form-control" />
+        <span asp-validation-for="Sifre" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="DogumTarihi" class="control-label">Doğum Tarihi</label>
@@ -36,6 +47,9 @@
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
 </form>
+
+<!-- Display Errors -->
+<div asp-validation-summary="All" class="text-danger"></div>
 
 <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 

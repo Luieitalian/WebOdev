@@ -37,7 +37,7 @@ namespace WebOdev.Controllers
 
             foreach (var error in errors)
             {
-                Console.WriteLine(error); // Or log the error
+                Console.WriteLine(error);
             }
 
             return View(islem);
