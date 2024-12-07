@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "İşlemler";
+}
+@model IEnumerable<IslemModel>
+
+<h2>@ViewData["Title"]</h2>
+
+<a href="Islem/IslemEkle">İşlem Ekle</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Başlık</th>
+            <th>Açıklama</th>
+            <th>Uzunluk</th>
+            <th>Ücret</th>
+            <th>Cinsiyet</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var islem in Model)
+        {
+            <tr>
+                <td>@islem.Id</td>
+                <td>@islem.Baslik</td>
+                <td>@islem.Aciklama</td>
+                <td>@islem.Uzunluk.ToString(@"hh\:mm")</td>
+                <td>₺@islem.Ucret</td>
+                <td>@islem.Cinsiyet.ToString()</td>
+            </tr>
+        }
+    </tbody>
+</table>

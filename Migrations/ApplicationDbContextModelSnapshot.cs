@@ -91,9 +91,8 @@ namespace WebOdev.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Cinsiyet")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Cinsiyet")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Ucret")
                         .HasColumnType("integer");
@@ -103,7 +102,85 @@ namespace WebOdev.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("IslemModel");
+                    b.ToTable("Islemler");
+                });
+
+            modelBuilder.Entity("WebOdev.Models.MusteriModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Cinsiyet")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("DogumTarihi")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Isim")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Soyisim")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Telefon")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Musteriler");
+                });
+
+            modelBuilder.Entity("WebOdev.Models.OnayliRandevuModel", b =>
+                {
+                    b.Property<int>("RandevuId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("RandevuId");
+
+                    b.ToTable("OnayliRandevular");
+                });
+
+            modelBuilder.Entity("WebOdev.Models.RandevuModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("BaslangicTarihi")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("BitisTarihi")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("CalisanId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IslemId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("IstemTarihi")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("MusteriId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CalisanId");
+
+                    b.HasIndex("IslemId");
+
+                    b.HasIndex("MusteriId");
+
+                    b.ToTable("Randevular");
                 });
 
             modelBuilder.Entity("WebOdev.Models.CalisanIslemModel", b =>
@@ -123,6 +200,44 @@ namespace WebOdev.Migrations
                     b.Navigation("Calisan");
 
                     b.Navigation("Islem");
+                });
+
+            modelBuilder.Entity("WebOdev.Models.OnayliRandevuModel", b =>
+                {
+                    b.HasOne("WebOdev.Models.RandevuModel", "Randevu")
+                        .WithOne()
+                        .HasForeignKey("WebOdev.Models.OnayliRandevuModel", "RandevuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Randevu");
+                });
+
+            modelBuilder.Entity("WebOdev.Models.RandevuModel", b =>
+                {
+                    b.HasOne("WebOdev.Models.CalisanModel", "Calisan")
+                        .WithMany()
+                        .HasForeignKey("CalisanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebOdev.Models.IslemModel", "Islem")
+                        .WithMany()
+                        .HasForeignKey("IslemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebOdev.Models.MusteriModel", "Musteri")
+                        .WithMany()
+                        .HasForeignKey("MusteriId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Calisan");
+
+                    b.Navigation("Islem");
+
+                    b.Navigation("Musteri");
                 });
 
             modelBuilder.Entity("WebOdev.Models.CalisanModel", b =>

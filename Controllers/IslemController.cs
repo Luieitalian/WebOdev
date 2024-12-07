@@ -3,32 +3,29 @@ using WebOdev.Models;
 
 namespace WebOdev.Controllers
 {
-    public class CalisanController : Controller
+    public class IslemController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CalisanController(ApplicationDbContext context)
+        public IslemController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         public IActionResult Index()
         {
-            var calisanlar = _context.Calisanlar.ToList();
-            return View(calisanlar);
+            var islemler = _context.Islemler.ToList();
+            return View(islemler);
         }
 
-        public IActionResult CalisanEkle()
-        {
-            return View();
-        }
+        public IActionResult IslemEkle() { return View(); }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Create(CalisanModel calisan)
+        public IActionResult Create(IslemModel islem)
         {
             if (ModelState.IsValid)
             {
-                _context.Calisanlar.Add(calisan);
+                _context.Islemler.Add(islem);
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
@@ -43,8 +40,7 @@ namespace WebOdev.Controllers
                 Console.WriteLine(error); // Or log the error
             }
 
-            return View(calisan);
+            return View(islem);
         }
     }
-
 }

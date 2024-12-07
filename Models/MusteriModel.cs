@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebOdev.Models
 {
-    public class CalisanModel
+    public class MusteriModel
     {
         [Key]
         public int Id { get; set; }
@@ -17,8 +17,5 @@ namespace WebOdev.Models
         [DataType(DataType.PhoneNumber)]
         public string Telefon { get; set; }
         public CinsiyetEnum Cinsiyet { get; set; }
-
-        [ValidateNever]
-        public ICollection<CalisanIslemModel> CalisanIslemleri { get; set; }
     }
 }

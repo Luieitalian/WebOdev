@@ -9,10 +9,12 @@ namespace WebOdev.Models
         public int Id { get; set; }
         public string Baslik { get; set; }
         public string Aciklama { get; set; }
+
+        [Required]
         public TimeSpan Uzunluk { get; set; }
         public int Ucret { get; set; }
 
-        public string Cinsiyet { get; set; }
+        public CinsiyetEnum Cinsiyet { get; set; }
 
         [ValidateNever]
         public ICollection<CalisanIslemModel> CalisanIslemleri { get; set; }
