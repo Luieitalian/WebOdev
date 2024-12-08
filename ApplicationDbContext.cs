@@ -30,19 +30,19 @@ namespace WebOdev
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<CalisanIslemModel>()
-                .HasKey(pa => new { pa.CalisanID, pa.IslemID });
+                .HasKey(pa => new { pa.CalisanId, pa.IslemId });
 
             // Foreign Key Relationship: Personnel -> PersonnelAbility
             modelBuilder.Entity<CalisanIslemModel>()
                 .HasOne(pa => pa.Calisan)
                 .WithMany(p => p.CalisanIslemleri)
-                .HasForeignKey(pa => pa.CalisanID);
+                .HasForeignKey(pa => pa.CalisanId);
 
             // Foreign Key Relationship: Ability -> PersonnelAbility
             modelBuilder.Entity<CalisanIslemModel>()
                 .HasOne(pa => pa.Islem)
                 .WithMany(a => a.CalisanIslemleri)
-                .HasForeignKey(pa => pa.IslemID);
+                .HasForeignKey(pa => pa.IslemId);
 
             modelBuilder.Entity<KullaniciModel>()
                 .Property(c => c.DogumTarihi)
@@ -76,24 +76,14 @@ namespace WebOdev
                 .WithMany()              // IslemModel can have many RandevuModels
                 .HasForeignKey(r => r.IslemId); // Foreign Key in RandevuModel
 
-            modelBuilder.Entity<KullaniciModel>()
-                .HasOne(a => a.Calisan)
-                .WithOne(c => c.Kullanici)
-                .HasForeignKey<KullaniciModel>(a => a.CalisanId);
-
-            modelBuilder.Entity<KullaniciModel>()
-                .HasOne(a => a.Musteri)
-                .WithOne(c => c.Kullanici)
-                .HasForeignKey<KullaniciModel>(a => a.MusteriId);
-
             modelBuilder.Entity<CalisanModel>()
                 .HasOne(c => c.Kullanici) // Calisan has one KullaniciModel
-                .WithOne(a => a.Calisan) // KullaniciModel has one Calisan
+                .WithOne()                  // KullaniciModel has one Calisan
                 .HasForeignKey<CalisanModel>(a => a.KullaniciId); // Use KullaniciId as FK
 
             modelBuilder.Entity<MusteriModel>()
                 .HasOne(c => c.Kullanici) // Musteri has one KullaniciModel
-                .WithOne(a => a.Musteri) // KullaniciModel has one Musteri
+                .WithOne() // KullaniciModel has one Musteri
                 .HasForeignKey<MusteriModel>(a => a.KullaniciId); // Use MusteriId as FK
         }
     }

@@ -6,7 +6,7 @@ namespace WebOdev.Models
 {
     public class OnayliRandevuModel
     {
-        [Key, ForeignKey("Randevu")] // Primary Key
+        [Key]
         public int RandevuId { get; set; }
 
         // Navigation Property

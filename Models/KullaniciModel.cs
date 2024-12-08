@@ -13,10 +13,5 @@ namespace WebOdev.Models
         public DateTime DogumTarihi { get; set; }
 
         public CinsiyetEnum Cinsiyet { get; set; }
-
-        public MusteriModel? Musteri { get; set; }
-        public int? MusteriId { get; set; }
-        public CalisanModel? Calisan { get; set; }
-        public int? CalisanId { get; set; }
     }
 }

@@ -21,10 +21,10 @@ namespace WebOdev.Models
         public DateTime BitisTarihi { get; set; }
 
         public CalisanModel Calisan { get; set; }
-        public int CalisanId { get; set; }
+        public string CalisanId { get; set; }
         public IslemModel Islem { get; set; }
         public int IslemId { get; set; }
         public MusteriModel Musteri { get; set; }
-        public int MusteriId { get; set; }
+        public string MusteriId { get; set; }
     }
 }
