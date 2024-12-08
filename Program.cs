@@ -20,6 +20,9 @@ namespace WebOdev
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            builder.Services.ConfigureApplicationCookie((options =>
+            { options.LoginPath = "/Giris/Index"; options.AccessDeniedPath = "/Giris/YetkisizGiris"; }));
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())

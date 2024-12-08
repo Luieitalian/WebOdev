@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -19,64 +20,69 @@ namespace WebOdev.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             var calisanlar = _context.Calisanlar.Include(c => c.Kullanici).ToList();
             return View(calisanlar);
         }
 
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public IActionResult CalisanEkle()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(KullaniciEkleViewModel model)
         {
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var user = new KullaniciModel
-                {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    PhoneNumber = model.Telefon,
-                    Cinsiyet = model.Cinsiyet,
-                    DogumTarihi = model.DogumTarihi,
-                    Isim = model.Isim,
-                    Soyisim = model.Soyisim,
-                };
-
-                var result = await _userManager.CreateAsync(user, model.Sifre);
-                if (result.Succeeded)
-                {
-                    // Optionally assign roles to the user
-                    await _userManager.AddToRoleAsync(user, "Calisan");
-
-                    var calisan = new CalisanModel
-                    {
-                        Kullanici = user,
-                    };
-                    await _context.Calisanlar.AddAsync(calisan);
-                    await _context.SaveChangesAsync();
-                    Console.WriteLine("database kaydedildi heralde amk?");
-                    // Redirect to another page after successful registration
-                    return RedirectToAction("Index", "Calisan");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        Console.WriteLine($"Error: {error.Code} - {error.Description}");
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
+                // Return the same view if something goes wrong
+                return View(nameof(CalisanEkle));
             }
 
-            // Return the same view if something goes wrong
+            var newuser = new KullaniciModel
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                PhoneNumber = model.Telefon,
+                Cinsiyet = model.Cinsiyet,
+                DogumTarihi = model.DogumTarihi,
+                Isim = model.Isim,
+                Soyisim = model.Soyisim,
+            };
+
+            var result = await _userManager.CreateAsync(newuser, model.Sifre);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(newuser, "Calisan");
+
+                var calisan = new CalisanModel
+                {
+                    Kullanici = newuser,
+                };
+
+                await _context.Calisanlar.AddAsync(calisan);
+                await _context.SaveChangesAsync();
+
+                // Redirect to another page after successful registration
+                return RedirectToAction("Index", "Calisan");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                    
+                {
+                    Console.WriteLine($"Error: {error.Code} - {error.Description}");
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
             return View(nameof(CalisanEkle));
         }
     }
-
 }

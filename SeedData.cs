@@ -29,7 +29,9 @@ namespace WebOdev
                 Cinsiyet = CinsiyetEnum.Erkek,
                 DogumTarihi = DateTime.Now,
                 Email = "berke.pite@ogr.sakarya.edu.tr",
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                PhoneNumber = "05360251285",
+                PhoneNumberConfirmed = true,
             };
 
             string adminPassword = "Admin@123";

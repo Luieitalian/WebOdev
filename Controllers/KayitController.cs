@@ -1,91 +1,54 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebOdev.Models;
 
 namespace WebOdev.Controllers
 {
     public class KayitController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<KullaniciModel> _userManager;
+        private readonly SignInManager<KullaniciModel> _signInManager;
+        private readonly ApplicationDbContext _context;
 
-        public KayitController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public KayitController(ApplicationDbContext context, UserManager<KullaniciModel> userManager, SignInManager<KullaniciModel> signInManager)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CalisanEkle(KullaniciEkleViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = new KullaniciModel
-                {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    PhoneNumber = model.Telefon,
-                    Cinsiyet = model.Cinsiyet,
-                    DogumTarihi = model.DogumTarihi,
-                    Isim = model.Isim,
-                    Soyisim = model.Soyisim,
-                };
-
-                var result = await _userManager.CreateAsync(user, model.Sifre);
-                if (result.Succeeded)
-                {
-                    // Optionally assign roles to the user
-                    await _userManager.AddToRoleAsync(user, "Calisan");
-
-                    // Redirect to another page after successful registration
-                    return RedirectToAction("Index", "Home");
-                }
-
-                // If there are errors, add them to ModelState
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-            }
-            var errors = ModelState.Values
-                .SelectMany(v => v.Errors)
-                .Select(e => e.ErrorMessage)
-                .ToList();
-
-            foreach (var error in errors)
-            {
-                Console.WriteLine(error);
-            }
-
-            // Return the same view if something goes wrong
-            return View();
-        }
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> KayitOl(KullaniciEkleViewModel model)
+        public async Task<IActionResult> KayitOl(string email, string password)
         {
             if (ModelState.IsValid)
             {
                 var user = new KullaniciModel
                 {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    PhoneNumber = model.Telefon,
-                    Cinsiyet = model.Cinsiyet,
-                    DogumTarihi = model.DogumTarihi,
-                    Isim = model.Isim,
-                    Soyisim = model.Soyisim,
+                    UserName = email,
+                    Email = email,
                 };
 
-                var result = await _userManager.CreateAsync(user, model.Sifre);
+                var result = await _userManager.CreateAsync(user, password);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "Musteri");
                     await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    var newmusteri = new MusteriModel 
+                    {
+                        Kullanici = user,
+                    };
+
+                    await _context.Musteriler.AddAsync(newmusteri);
+                    await _context.SaveChangesAsync();
+
                     return RedirectToAction("Index", "Home");
                 }
 

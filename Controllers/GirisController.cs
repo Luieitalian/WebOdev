@@ -9,10 +9,10 @@ namespace WebOdev.Controllers
     public class GirisController : Controller
     {
         private readonly ILogger<GirisController> _logger;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<KullaniciModel> _userManager;
+        private readonly SignInManager<KullaniciModel> _signInManager;
 
-        public GirisController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<GirisController> logger)
+        public GirisController(UserManager<KullaniciModel> userManager, SignInManager<KullaniciModel> signInManager, ILogger<GirisController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -53,6 +53,12 @@ namespace WebOdev.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public IActionResult YetkisizGiris()
+        {
+            return View();
         }
     }
 }
