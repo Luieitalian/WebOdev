@@ -22,5 +22,6 @@ namespace WebOdev.Models
 
         [DataType(DataType.PhoneNumber, ErrorMessage = "Lütfen geçerli bir telefon numarası giriniz!")]
         public string Telefon { get; set; }
+        public string? Id { get; internal set; }
     }
 }

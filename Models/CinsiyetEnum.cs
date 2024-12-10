@@ -1,10 +1,10 @@
-﻿namespace WebOdev
+﻿namespace WebOdev.Models
 {
     public enum CinsiyetEnum
     {
-        Erkek = 1,
-        Kadin,
-        Diger,
-        BelirtmekIstemiyorum
+        Seciniz = 0,   // Varsayılan 'Seciniz' seçeneği
+        Erkek = 1,     // Erkek
+        Kadın = 2,     // Kadın
+        Diğer = 3      // Diğer
     }
 }
