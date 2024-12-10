@@ -33,8 +33,11 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Islem" asp-action="Index">İşlemler</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Randevu" asp-action="Index">Randevular</a>
+                            </li>
                         }
-                        @if(!User.Identity.IsAuthenticated)
+                        @if (!User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Giris" asp-action="Index">Giriş Yap</a>
@@ -42,7 +45,9 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Kayit" asp-action="Index">Kayıt Ol</a>
                             </li>
-                        }else {
+                        }
+                        else
+                        {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Giris" asp-action="CikisYap">Çıkış Yap</a>
                             </li>

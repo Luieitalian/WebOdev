@@ -1,46 +1,51 @@
-﻿@model WebOdev.Models.IslemModel
+﻿@model WebOdev.Models.RandevuModel
 
-@{
-    ViewData["Title"] = "İşlem Ekle";
-}
-
-<h2>@ViewData["Title"]</h2>
+<h2 class="mb-4">Yeni Randevu Ekle</h2>
 
 <form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
     <div class="form-group">
-        <label asp-for="Baslik" class="control-label">Başlık</label>
-        <input asp-for="Baslik" class="form-control" />
-        <span asp-validation-for="Baslik" class="text-danger"></span>
+        <label asp-for="BaslangicTarihi" class="control-label">Başlangıç Tarihi</label>
+        <input asp-for="BaslangicTarihi" type="datetime-local" class="form-control" />
+        <span asp-validation-for="BaslangicTarihi" class="text-danger"></span>
     </div>
+
     <div class="form-group">
-        <label asp-for="Aciklama" class="control-label">Açıklama</label>
-        <input asp-for="Aciklama" class="form-control" />
-        <span asp-validation-for="Aciklama" class="text-danger"></span>
+        <label asp-for="BitisTarihi" class="control-label">Bitiş Tarihi</label>
+        <input asp-for="BitisTarihi" type="datetime-local" class="form-control" />
+        <span asp-validation-for="BitisTarihi" class="text-danger"></span>
     </div>
+
     <div class="form-group">
-        <label asp-for="Uzunluk" class="control-label">Uzunluk</label>
-        <input asp-for="Uzunluk" type="time" class="form-control" />
-        <span asp-validation-for="Uzunluk" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Ucret" class="control-label">Ücret</label>
-        <input asp-for="Ucret" type="number" class="form-control" />
-        <span asp-validation-for="Ucret" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Cinsiyet" class="control-label">Cinsiyet</label>
-        <select asp-for="Cinsiyet" class="form-control" asp-items="Html.GetEnumSelectList<CinsiyetEnum>()">
-            <option value="">Select</option>
+        <label asp-for="CalisanId" class="control-label">Çalışan</label>
+        <select asp-for="CalisanId" class="form-control" asp-items="@(new SelectList(ViewBag.Calisanlar, "KullaniciId", "AdSoyad"))">
+            <option value="">Seçiniz</option>
         </select>
-        <span asp-validation-for="Cinsiyet" class="text-danger"></span>
+        <span asp-validation-for="CalisanId" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Save</button>
+
+    <div class="form-group">
+        <label asp-for="MusteriId" class="control-label">Müşteri</label>
+        <select asp-for="MusteriId" class="form-control" asp-items="@(new SelectList(ViewBag.Musteriler, "KullaniciId", "AdSoyad"))">
+            <option value="">Seçiniz</option>
+        </select>
+        <span asp-validation-for="MusteriId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="IslemId" class="control-label">İşlem</label>
+        <select asp-for="IslemId" class="form-control" asp-items="@(new SelectList(ViewBag.Islemler, "Id", "Baslik"))">
+            <option value="">Seçiniz</option>
+        </select>
+        <span asp-validation-for="IslemId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
 </form>
 
-<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+<a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @Html.RenderPartialAsync("_ValidationScriptsPartial")
 }
