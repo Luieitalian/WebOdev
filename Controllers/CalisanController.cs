@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 using WebOdev.Models;
 
 namespace WebOdev.Controllers
@@ -20,32 +19,37 @@ namespace WebOdev.Controllers
             _context = context;
         }
 
+        // Admin rolünde olanlar yalnızca çalışanları görebilir
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
+            // Çalışanları listelerken ilişkili kullanıcı bilgilerini de getiriyoruz
             var calisanlar = _context.Calisanlar.Include(c => c.Kullanici).ToList();
             return View(calisanlar);
         }
 
+        // Admin rolünde olanlar yalnızca çalışan ekleyebilir
         [Authorize(Roles = "Admin")]
-        [ValidateAntiForgeryToken]
         public IActionResult CalisanEkle()
         {
             return View();
         }
 
+        // POST action'ı - Çalışan oluşturma
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(KullaniciEkleViewModel model)
         {
+            model.Id = Guid.NewGuid().ToString();
 
             if (!ModelState.IsValid)
             {
-                // Return the same view if something goes wrong
-                return View(nameof(CalisanEkle));
+                // Eğer model geçerli değilse, formu aynı sayfada tekrar göster
+                return View("CalisanEkle", model);
             }
 
+            // Yeni kullanıcı oluşturma
             var newuser = new KullaniciModel
             {
                 UserName = model.Email,
@@ -57,11 +61,14 @@ namespace WebOdev.Controllers
                 Soyisim = model.Soyisim,
             };
 
+            // Kullanıcıyı oluştur
             var result = await _userManager.CreateAsync(newuser, model.Sifre);
             if (result.Succeeded)
             {
+                // Yeni kullanıcıya 'Calisan' rolünü ekle
                 await _userManager.AddToRoleAsync(newuser, "Calisan");
 
+                // Yeni çalışan ekle
                 var calisan = new CalisanModel
                 {
                     Kullanici = newuser,
@@ -70,19 +77,126 @@ namespace WebOdev.Controllers
                 await _context.Calisanlar.AddAsync(calisan);
                 await _context.SaveChangesAsync();
 
-                // Redirect to another page after successful registration
-                return RedirectToAction("Index", "Calisan");
+                // Başarılıysa çalışanlar listesine yönlendir
+                return RedirectToAction("Index");
             }
             else
             {
+                // Hata mesajlarını ModelState'e ekle
                 foreach (var error in result.Errors)
-                    
                 {
-                    Console.WriteLine($"Error: {error.Code} - {error.Description}");
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-            return View(nameof(CalisanEkle));
+
+            // Eğer bir hata olduysa, formu tekrar yükle
+            return View("CalisanEkle", model);
         }
+
+        // Çalışan silme işlemi
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Sil(string id)
+        {
+            // ID'ye sahip çalışan ve ilişkili kullanıcıyı bul
+            var calisan = await _context.Calisanlar
+                                       .Include(c => c.Kullanici)
+                                       .FirstOrDefaultAsync(c => c.KullaniciId == id);
+
+            if (calisan == null)
+            {
+                // Eğer çalışan bulunamazsa, hata sayfasına yönlendir
+                return NotFound();
+            }
+
+            // Kullanıcıyı sil
+            var result = await _userManager.DeleteAsync(calisan.Kullanici);
+            if (!result.Succeeded)
+            {
+                // Eğer silme işlemi başarısız olursa, hataları ModelState'e ekleyin
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return RedirectToAction("Index");
+            }
+
+            // Kullanıcı silindikten sonra, çalışanın veritabanından silinmesi
+            _context.Calisanlar.Remove(calisan);
+
+            try
+            {
+                // Değişiklikleri veritabanına kaydet
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Eğer bir concurrency hatası alırsanız, burayı yakalayabilirsiniz
+                ModelState.AddModelError(string.Empty, "Veri güncellenirken bir hata oluştu.");
+                _logger.LogError(ex, "Concurrency exception occurred while saving changes.");
+                return RedirectToAction("Index");
+            }
+
+            // Başarılıysa, çalışanlar listesine yönlendir
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> CalisanGuncelle(string id)
+        {
+            var calisan = await _context.Calisanlar
+                                         .Include(c => c.Kullanici)
+                                         .FirstOrDefaultAsync(c => c.KullaniciId == id);
+
+            if (calisan == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new KullaniciEkleViewModel
+            {
+                Id = calisan.Kullanici.Id,
+                Isim = calisan.Kullanici.Isim,
+                Soyisim = calisan.Kullanici.Soyisim,
+                Email = calisan.Kullanici.Email,
+                Telefon = calisan.Kullanici.PhoneNumber,
+
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CalisanGuncelle(KullaniciEkleViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var calisan = await _context.Calisanlar
+                                         .Include(c => c.Kullanici)
+                                         .FirstOrDefaultAsync(c => c.KullaniciId == model.Id);
+
+            if (calisan == null)
+            {
+                return NotFound();
+            }
+
+            // Güncellenmiş verilerle kullanıcıyı güncelle
+            calisan.Kullanici.Isim = model.Isim;
+            calisan.Kullanici.Soyisim = model.Soyisim;
+            calisan.Kullanici.Email = model.Email;
+            calisan.Kullanici.PhoneNumber = model.Telefon;
+            calisan.Kullanici.DogumTarihi = model.DogumTarihi;
+            calisan.Kullanici.Cinsiyet = model.Cinsiyet;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+
+
     }
 }

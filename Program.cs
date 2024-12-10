@@ -16,6 +16,8 @@ namespace WebOdev
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DBCon")));
 
+            builder.Services.AddAutoMapper(typeof(WebOdev.Mappings.MappingProfile));
+
             builder.Services.AddIdentity<KullaniciModel, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();

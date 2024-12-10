@@ -6,7 +6,7 @@ namespace WebOdev.Models
     public class IslemModel
     {
         [Key]
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Baslik { get; set; }
         public string Aciklama { get; set; }
 
