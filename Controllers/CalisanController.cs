@@ -41,6 +41,8 @@ namespace WebOdev.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(KullaniciEkleViewModel model)
         {
+            model.Id = Guid.NewGuid().ToString();
+
             if (!ModelState.IsValid)
             {
                 // Eğer model geçerli değilse, formu aynı sayfada tekrar göster

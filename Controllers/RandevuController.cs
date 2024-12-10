@@ -2,16 +2,21 @@
 using Microsoft.EntityFrameworkCore;
 using WebOdev.Models; // Model sınıfları
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using AutoMapper;
+using System;
 
 namespace WebOdev.Controllers
 {
     public class RandevuController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public RandevuController(ApplicationDbContext context)
+        public RandevuController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // Randevuları Listele
@@ -27,52 +32,52 @@ namespace WebOdev.Controllers
             return View(randevular);
         }
 
-        // Randevu Ekleme Sayfasını Göster
-        [HttpGet]
-        public IActionResult Create()
+
+        // GET
+        public IActionResult RandevuEkle()
         {
-            LoadViewData();
-            return View("RandevuEkle.cshtml");
+            var randevu = new RandevuModelDto();
+            var calisanlar = _context.Calisanlar;
+            var musteriler = _context.Musteriler;
+            var islemler = _context.Islemler;
+            // Çalışanları, müşterileri ve işlemleri ViewBag'e aktarma
+            randevu.Prepare.Calisan = calisanlar.Select(x => new SelectListItem { Text = x.KullaniciId, Value = x.KullaniciId }).ToList();
+
+            randevu.Prepare.Musteriler = musteriler.Select(x => new SelectListItem { Text = x.KullaniciId, Value = x.KullaniciId }).ToList();
+            ;
+            randevu.Prepare.Islemler = islemler.Select(x => new SelectListItem { Text = x.Aciklama, Value = x.Id.ToString() }).ToList();
+
+            // Create View'ini döndürme
+            return View(randevu);
         }
 
+        // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(RandevuModel model)
+        public IActionResult RandevuEkle(RandevuModelDto model)
         {
-            if (ModelState.IsValid)
-            {
-                // Model geçerliyse, veritabanına kaydediyoruz
-                _context.Randevular.Add(model);
-                _context.SaveChanges();
+             int randevuId = 1;
+             // Model geçerli ise, veritabanına kaydetme
+             var mapResult = _mapper.Map<RandevuModelDto, RandevuModel>(model);
+            mapResult.IstemTarihi = DateTime.UtcNow;
 
-                // Yeni randevu başarıyla eklendiyse, kullanıcıyı "RandevuEkle.cshtml" sayfasına yönlendiriyoruz
-                return View("RandevuEkle", model); // Aynı sayfayı geri gönderiyoruz (RandevuEkle.cshtml)
-            }
-
-            // Model geçersizse, ViewData'yı tekrar yükleyip formu aynı sayfada tekrar gösteriyoruz
-            LoadViewData(); // Form geçerli değilse ViewData'yı tekrar yükle
-            return View("RandevuEkle", model); // Aynı sayfayı geri gönderiyoruz (RandevuEkle.cshtml)
-        }
+            mapResult.BaslangicTarihi = mapResult.BaslangicTarihi.Value.ToUniversalTime();
+            //mapResult.BaslangicTarihi = DateTime.UtcNow;
+            mapResult.BitisTarihi = mapResult.BaslangicTarihi.Value.ToUniversalTime();
 
 
+            var randevu = _context.Randevular;
+            if (randevu is not null && randevu.Any())
+                randevuId = randevu.Max(x => x.Id) + 1;
+             //Max(x => x.Id);
 
+             mapResult.Id = randevuId;
+             _context.Randevular.Add(mapResult);
+             _context.SaveChanges();
 
-        // Randevu Detay Sayfası
-        public IActionResult Details(int id)
-        {
-            var randevu = _context.Randevular
-                .Include(r => r.Calisan)
-                .ThenInclude(c => c.Kullanici)
-                .Include(r => r.Islem)
-                .Include(r => r.Musteri)
-                .FirstOrDefault(r => r.Id == id);
-
-            if (randevu == null)
-            {
-                return NotFound();
-            }
-
-            return View(randevu);
+             // Başarılı işlem sonrası kullanıcıyı yönlendirme
+             return RedirectToAction("Index"); // Örneğin liste sayfasına yönlendirme
+          
         }
 
         // Randevu Silme

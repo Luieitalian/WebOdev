@@ -1,9 +1,5 @@
 ﻿@model WebOdev.Models.KullaniciEkleViewModel
 
-@* @{
-    ViewData["Title"] = "Çalışan Ekle";
-} *@
-
 <h2>@ViewData["Title"]</h2>
 
 <form action="Create" method="post" class="needs-validation" novalidate>
@@ -14,6 +10,9 @@
             <h4>Çalışan Bilgilerini Girin</h4>
         </div>
         <div class="card-body">
+            <!-- ID Alanını Gizle -->
+            <input type="hidden" asp-for="Id" />
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -113,3 +112,4 @@
         }, false);
     })();
 </script>
+

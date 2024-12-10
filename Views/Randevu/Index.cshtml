@@ -5,6 +5,9 @@
 
 <h2 class="mb-4">@ViewData["Title"]</h2>
 
+<!-- Randevu Ekle Butonu -->
+<a asp-action="RandevuEkle" class="btn btn-success mb-3">Randevu Ekle</a>
+
 <!-- Randevular Tablosu -->
 <div class="table-responsive">
     <table class="table table-striped table-bordered table-hover">
@@ -23,11 +26,11 @@
             {
                 <tr>
                     <td>@randevu.Id</td>
-                    <td>@randevu.Calisan.Kullanici.Isim @randevu.Calisan.Kullanici.Soyisim</td>
-                    <td>@randevu.Musteri.Kullanici.Isim @randevu.Musteri.Kullanici.Soyisim</td>
-                    <td>@randevu.BaslangicTarihi.ToString("yyyy-MM-dd")</td>
-                    <td>@randevu.BitisTarihi.ToString("yyyy-MM-dd")</td>
-                    <td>@randevu.Islem.Baslik</td>
+                    <td>@randevu?.Calisan?.Kullanici.Isim @randevu?.Calisan?.Kullanici.Soyisim</td>
+                    <td>@randevu?.Musteri?.Kullanici.Isim @randevu?.Musteri?.Kullanici.Soyisim</td>
+                    <td>@randevu?.BaslangicTarihi.ToString()</td>
+                    <td>@randevu?.BitisTarihi.ToString()</td>
+                    <td>@randevu?.Islem?.Baslik</td>
                 </tr>
             }
         </tbody>
@@ -51,3 +54,4 @@
         </ul>
     </nav>
 }
+
