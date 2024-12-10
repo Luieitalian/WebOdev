@@ -20,19 +20,7 @@ namespace WebOdev.Controllers
             _context = context;
         }
 
-        [Authorize(Roles = "Admin")]
-        public IActionResult Index()
-        {
-            var calisanlar = _context.Calisanlar.Include(c => c.Kullanici).ToList();
-            return View(calisanlar);
-        }
-
-        [Authorize(Roles = "Admin")]
-        [ValidateAntiForgeryToken]
-        public IActionResult CalisanEkle()
-        {
-            return View();
-        }
+        
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
