@@ -1,60 +1,115 @@
 ﻿@model WebOdev.Models.KullaniciEkleViewModel
 
-@{
+@* @{
     ViewData["Title"] = "Çalışan Ekle";
-}
+} *@
 
 <h2>@ViewData["Title"]</h2>
 
-<form action="Create" method="post">
+<form action="Create" method="post" class="needs-validation" novalidate>
     @Html.AntiForgeryToken()
-    <div class="form-group">
-        <label asp-for="Isim" class="control-label">İsim</label>
-        <input asp-for="Isim" class="form-control" />
-        <span asp-validation-for="Isim" class="text-danger"></span>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4>Çalışan Bilgilerini Girin</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="Isim" class="control-label">İsim</label>
+                        <input asp-for="Isim" class="form-control" id="Isim" placeholder="Ahmet" required />
+                        <div class="invalid-feedback">İsim alanı gereklidir.</div>
+                        <span asp-validation-for="Isim" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="Soyisim" class="control-label">Soyisim</label>
+                        <input asp-for="Soyisim" class="form-control" id="Soyisim" placeholder="Yılmaz" required />
+                        <div class="invalid-feedback">Soyisim alanı gereklidir.</div>
+                        <span asp-validation-for="Soyisim" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="Email" class="control-label">Email</label>
+                <input asp-for="Email" type="email" class="form-control" id="Email" placeholder="ahmet@ornek.com" required />
+                <div class="invalid-feedback">Geçerli bir email adresi girin.</div>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Sifre" class="control-label">Şifre</label>
+                <input asp-for="Sifre" type="password" class="form-control" id="Sifre" placeholder="Şifre" required />
+                <div class="invalid-feedback">Şifre alanı gereklidir.</div>
+                <span asp-validation-for="Sifre" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="DogumTarihi" class="control-label">Doğum Tarihi</label>
+                        <input asp-for="DogumTarihi" type="date" class="form-control" id="DogumTarihi" required />
+                        <div class="invalid-feedback">Doğum tarihi alanı gereklidir.</div>
+                        <span asp-validation-for="DogumTarihi" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="Telefon" class="control-label">Telefon</label>
+                        <input asp-for="Telefon" type="tel" class="form-control" id="Telefon" placeholder="05551234567" required />
+                        <div class="invalid-feedback">Telefon numarası gereklidir.</div>
+                        <span asp-validation-for="Telefon" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="Cinsiyet" class="control-label">Cinsiyet</label>
+                <select asp-for="Cinsiyet" class="form-control" asp-items="Html.GetEnumSelectList<CinsiyetEnum>()" required>
+                    <option value="">Seçiniz</option>
+                </select>
+                <div class="invalid-feedback">Cinsiyet seçimi gereklidir.</div>
+                <span asp-validation-for="Cinsiyet" class="text-danger"></span>
+            </div>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-success btn-lg">Çalışanı Kaydet</button>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Soyisim" class="control-label">Soyisim</label>
-        <input asp-for="Soyisim" class="form-control" />
-        <span asp-validation-for="Soyisim" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Email" class="control-label">Email</label>
-        <input asp-for="Email" type="email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Sifre" class="control-label">Sifre</label>
-        <input asp-for="Sifre" type="password" class="form-control" />
-        <span asp-validation-for="Sifre" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="DogumTarihi" class="control-label">Doğum Tarihi</label>
-        <input asp-for="DogumTarihi" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" />
-        <span asp-validation-for="DogumTarihi" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Telefon" class="control-label">Telefon</label>
-        <input asp-for="Telefon" type="tel" class="form-control" />
-        <span asp-validation-for="Telefon" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Cinsiyet" class="control-label">Cinsiyet</label>
-        <select asp-for="Cinsiyet" class="form-control" asp-items="Html.GetEnumSelectList<CinsiyetEnum>()">
-            <option value="">Select</option>
-        </select>
-        <span asp-validation-for="Cinsiyet" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Save</button>
+
 </form>
 
 <!-- Display Errors -->
-<div asp-validation-summary="All" class="text-danger"></div>
+<div asp-validation-summary="All" class="text-danger mt-3"></div>
 
-<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+<a asp-action="Index" class="btn btn-secondary mt-3">Geri Dön</a>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
+<!-- JavaScript: Bootstrap validation -->
+<script>
+    // Boş alan kontrolü
+    (function () {
+        'use strict'
+        window.addEventListener('load', function () {
+            var forms = document.getElementsByClassName('needs-validation');
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>

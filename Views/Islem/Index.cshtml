@@ -1,34 +1,61 @@
 ﻿@{
     ViewData["Title"] = "İşlemler";
 }
-@model IEnumerable<IslemModel>
 
-<h2>@ViewData["Title"]</h2>
+@model IEnumerable<WebOdev.Models.IslemModel>
 
-<a href="Islem/IslemEkle">İşlem Ekle</a>
+<h2 class="mb-4">@ViewData["Title"]</h2>
 
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Başlık</th>
-            <th>Açıklama</th>
-            <th>Uzunluk</th>
-            <th>Ücret</th>
-            <th>Cinsiyet</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var islem in Model)
-        {
+<!-- İşlem Ekle Butonu -->
+<div class="mb-3">
+    <a href="@Url.Action("IslemEkle", "Islem")" class="btn btn-success">
+        <i class="fas fa-plus-circle"></i> İşlem Ekle
+    </a>
+</div>
+
+<!-- İşlemler Tablosu -->
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
             <tr>
-                <td>@islem.Id</td>
-                <td>@islem.Baslik</td>
-                <td>@islem.Aciklama</td>
-                <td>@islem.Uzunluk.ToString(@"hh\:mm")</td>
-                <td>₺@islem.Ucret</td>
-                <td>@islem.Cinsiyet.ToString()</td>
+                <th>ID</th>
+                <th>Başlık</th>
+                <th>Açıklama</th>
+                <th>Uzunluk</th>
+                <th>Ücret</th>
+                <th>Cinsiyet</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var islem in Model)
+            {
+                <tr>
+                    <td>@islem.Id</td>
+                    <td>@islem.Baslik</td>
+                    <td>@islem.Aciklama</td>
+                    <td>@islem.Uzunluk.ToString(@"hh\:mm")</td>
+                    <td>₺@islem.Ucret</td>
+                    <td>@islem.Cinsiyet.ToString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Sayfalama -->
+@if (Model.Any())
+{
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Önceki</a>
+            </li>
+            <li class="page-item active">
+                <a class="page-link" href="#">1</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">Sonraki</a>
+            </li>
+        </ul>
+    </nav>
+}
