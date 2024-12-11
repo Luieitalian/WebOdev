@@ -8,9 +8,9 @@ namespace WebOdev.Models
         public DateTime? IstemTarihi { get; set; }
         public DateTime? BaslangicTarihi { get; set; }
         public DateTime? BitisTarihi { get; set; }
-        public string? CalisanId { get; set; }
-        public int? IslemId { get; set; }
-        public string? MusteriId { get; set; }
+        public string? CalisanAdi { get; set; }
+        public string? IslemAdi { get; set; }
+        public string? MusteriAdi { get; set; }
         public RandevuPrepareModel? Prepare { get; set; } = new();
     }
 }

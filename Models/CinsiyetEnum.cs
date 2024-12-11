@@ -4,7 +4,7 @@
     {
         Seciniz = 0,   // Varsayılan 'Seciniz' seçeneği
         Erkek = 1,     // Erkek
-        Kadın = 2,     // Kadın
-        Diğer = 3      // Diğer
+        Kadin = 2,     // Kadın
+        Diger = 3      // Diğer
     }
 }

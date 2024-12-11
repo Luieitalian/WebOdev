@@ -39,7 +39,7 @@ namespace WebOdev
                 UserName = "admin2",
                 Isim = "Zehranur",
                 Soyisim = "Sarı",
-                //Cinsiyet = CinsiyetEnum.Kadin,
+                Cinsiyet = CinsiyetEnum.Kadin,
                 DogumTarihi = DateTime.Now,
                 Email = "zehranur.sari@ogr.sakarya.edu.tr",
                 EmailConfirmed = true,
