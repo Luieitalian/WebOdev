@@ -117,7 +117,5 @@ namespace WebOdev.Controllers
                 .ToList();
         }
 
-            return View(islem);
-        }
     }
 }
