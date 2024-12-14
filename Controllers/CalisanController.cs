@@ -41,8 +41,6 @@ namespace WebOdev.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(KullaniciEkleViewModel model)
         {
-            model.Id = Guid.NewGuid().ToString();
-
             if (!ModelState.IsValid)
             {
                 // Eğer model geçerli değilse, formu aynı sayfada tekrar göster
@@ -94,10 +92,10 @@ namespace WebOdev.Controllers
         }
 
         // Çalışan silme işlemi
-        [Authorize(Roles = "Admin")]
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Sil(string id)
+        public async Task<IActionResult> Delete(string id)
         {
             // ID'ye sahip çalışan ve ilişkili kullanıcıyı bul
             var calisan = await _context.Calisanlar
@@ -142,33 +140,18 @@ namespace WebOdev.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> CalisanGuncelle(string id)
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult CalisanGuncelle()
         {
-            var calisan = await _context.Calisanlar
-                                         .Include(c => c.Kullanici)
-                                         .FirstOrDefaultAsync(c => c.KullaniciId == id);
-
-            if (calisan == null)
-            {
-                return NotFound();
-            }
-
-            var viewModel = new KullaniciEkleViewModel
-            {
-                Id = calisan.Kullanici.Id,
-                Isim = calisan.Kullanici.Isim,
-                Soyisim = calisan.Kullanici.Soyisim,
-                Email = calisan.Kullanici.Email,
-                Telefon = calisan.Kullanici.PhoneNumber,
-
-            };
-
-            return View(viewModel);
+            var calisanlar = _context.Calisanlar.Include(c => c.Kullanici).ToList();
+            return View(calisanlar);
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CalisanGuncelle(KullaniciEkleViewModel model)
+        public async Task<IActionResult> Update(KullaniciEkleViewModel model)
         {
             if (!ModelState.IsValid)
             {

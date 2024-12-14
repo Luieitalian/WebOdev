@@ -32,19 +32,18 @@ namespace WebOdev.Controllers
             return View(randevular);
         }
 
-
         // GET
         public IActionResult RandevuEkle()
-        {
+        {{}
             var randevu = new RandevuModelDto();
             var calisanlar = _context.Calisanlar;
             var musteriler = _context.Musteriler;
             var islemler = _context.Islemler;
             // Çalışanları, müşterileri ve işlemleri ViewBag'e aktarma
-            randevu.Prepare.Calisan = calisanlar.Select(x => new SelectListItem { Text = x.KullaniciId, Value = x.KullaniciId }).ToList();
+            randevu.Prepare.Calisan = calisanlar.Select(x => new SelectListItem { Text = $"{x.Kullanici.Isim} {x.Kullanici.Soyisim}", Value = $"{x.Kullanici.Isim}{x.Kullanici.Soyisim}" }).ToList();
 
-            randevu.Prepare.Musteriler = musteriler.Select(x => new SelectListItem { Text = x.KullaniciId, Value = x.KullaniciId }).ToList();
-            ;
+            randevu.Prepare.Musteriler = musteriler.Select(x => new SelectListItem { Text = $"{x.Kullanici.Isim} {x.Kullanici.Soyisim}", Value = $"{x.Kullanici.Isim}{x.Kullanici.Soyisim}" }).ToList();
+            
             randevu.Prepare.Islemler = islemler.Select(x => new SelectListItem { Text = x.Aciklama, Value = x.Id.ToString() }).ToList();
 
             // Create View'ini döndürme
