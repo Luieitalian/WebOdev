@@ -4,11 +4,11 @@ using WebOdev.Models;
 
 namespace WebOdev.Controllers
 {
-    public class HomeController : Controller
+    public class AnasayfaController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<AnasayfaController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public AnasayfaController(ILogger<AnasayfaController> logger)
         {
             _logger = logger;
         }

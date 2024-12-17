@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Adım 2";
+}
+@model IEnumerable<CalisanModel>
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+<form asp-action="Adim2" method="post" class="form-group mb-3">
+    <label class="form-label">Çalışan</label>
+    <select name="calisanId" class="form-control" aria-label="Çalışan Seçimi">
+        <option value="">Lütfen Çalışan Seçin</option>
+        @foreach (var calisan in Model)
+        {
+            <option value="@calisan.Kullanici.Id">@calisan.Kullanici.Isim @calisan.Kullanici.Soyisim</option>
+        }
+    </select>
+<!-- Devam Butonu -->
+    <div class="form-group text-center mt-3">
+        <button type="submit" class="btn btn-success btn-lg w-100">Devam</button>
+    </div>
+</form>

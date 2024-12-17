@@ -21,7 +21,7 @@
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" style="color:white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" style="color:white" asp-area="" asp-controller="Anasayfa" asp-action="Index">Anasayfa</a>
                         </li>
                         @if (User.IsInRole("Admin"))
                         {
@@ -33,6 +33,18 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" style="color:white" asp-area="" asp-controller="Randevu" asp-action="Index">Randevular</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Calisan")) 
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" style="color:saddlebrown" asp-area="" asp-controller="Calisan" asp-action="CalisanPaneli">Çalışan Paneli</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Calisan") || User.IsInRole("Musteri"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" style="color:white" asp-area="" asp-controller="RandevuAl" asp-action="Adim1">Randevu Al</a>
                             </li>
                         }
                         @if (!User.Identity.IsAuthenticated)

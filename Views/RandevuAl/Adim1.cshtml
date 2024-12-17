@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Adım 1";
+}
+@model IEnumerable<IslemModel>
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+
+<form asp-action="Adim1" method="post" class="form-group mb-3">
+    <label class="form-label">İşlem</label>
+    <select name="islemId" class="form-control" aria-label="İşlem Seçimi">
+        <option value="">Lütfen İşlem Seçin</option>
+        @foreach (var islem in Model.ToList())
+        {
+            <option value="@islem.Id">@islem.Baslik</option>
+        }
+    </select>
+<!-- Devam Butonu -->
+    <div class="form-group text-center mt-3">
+        <button type="submit" class="btn btn-success btn-lg w-100">Devam</button>
+    </div>
+</form>

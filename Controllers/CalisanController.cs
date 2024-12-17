@@ -28,6 +28,49 @@ namespace WebOdev.Controllers
             return View(calisanlar);
         }
 
+        [Authorize(Roles = "Calisan")]
+        public IActionResult CalisanPaneli()
+        {
+            // Çalışanları listelerken ilişkili kullanıcı bilgilerini de getiriyoruz
+            var randevular = _context.Randevular.Include(c => c.Islem).Include(c => c.Musteri).ToList();
+            return View(randevular);
+        }
+
+        // Admin rolünde olanlar yalnızca çalışan ekleyebilir
+        [Authorize(Roles = "Admin, Calisan")]
+        public IActionResult IslemEkle()
+        {
+            var islemler = _context.Islemler.ToList();
+            return View(islemler);
+        }
+
+        [Authorize(Roles = "Admin, Calisan")]
+        [HttpPost]
+        public IActionResult IslemEkle(int id, int yetkinlik, string not)
+        {
+            var query =  from calisan in _context.Calisanlar
+                         join kullanici in _userManager.Users
+                         on calisan.KullaniciId equals kullanici.Id
+                         select new
+                         {
+                             ID = kullanici.Id
+                         };
+
+
+            var newcalisanislem = new CalisanIslemModel
+            {
+                CalisanId = query.Single().ID,
+                IslemId = id,
+                Yetkinlik = yetkinlik,
+                Not = not,
+            };
+
+            _context.CalisanIslemleri.Add(newcalisanislem);
+            _context.SaveChanges();
+
+            return RedirectToAction("CalisanPaneli");
+        }
+
         // Admin rolünde olanlar yalnızca çalışan ekleyebilir
         [Authorize(Roles = "Admin")]
         public IActionResult CalisanEkle()

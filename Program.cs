@@ -22,8 +22,13 @@ namespace WebOdev
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            builder.Services.ConfigureApplicationCookie((options =>
-            { options.LoginPath = "/Giris/Index"; options.AccessDeniedPath = "/Giris/YetkisizGiris"; }));
+            builder.Services.ConfigureApplicationCookie(options =>
+            { options.LoginPath = "/Giris/Index"; options.AccessDeniedPath = "/Giris/YetkisizGiris"; });
+
+            builder.Services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.IsEssential = true;
+            });
 
             var app = builder.Build();
 
@@ -41,6 +46,8 @@ namespace WebOdev
                 app.UseHsts();
             }
             
+            app.UseSession();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -51,7 +58,7 @@ namespace WebOdev
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Anasayfa}/{action=Index}/{id?}");
 
             await app.RunAsync();
         }

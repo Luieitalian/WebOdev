@@ -35,7 +35,7 @@ namespace WebOdev.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home"); // Redirect to a secured page or home page
+                    return RedirectToAction("Index", "Anasayfa"); // Redirect to a secured page or home page
                 }
 
                 ModelState.AddModelError("", "Invalid login attempt.");
@@ -52,7 +52,7 @@ namespace WebOdev.Controllers
         public async Task<IActionResult> CikisYap()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Anasayfa");
         }
 
         [HttpGet]

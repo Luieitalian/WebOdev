@@ -13,6 +13,7 @@ namespace WebOdev
 
         public DbSet<CalisanModel> Calisanlar { get; set; }
         public DbSet<IslemModel> Islemler { get; set; }
+        public DbSet<CalisanIslemModel> CalisanIslemleri { get; set; }
         public DbSet<RandevuModel> Randevular { get; set; }
         public DbSet<OnayliRandevuModel> OnayliRandevular { get; set; }
         public DbSet<MusteriModel> Musteriler { get; set; }
