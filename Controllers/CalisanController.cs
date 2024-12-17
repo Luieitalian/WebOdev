@@ -183,12 +183,24 @@ namespace WebOdev.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
+        [HttpGet("Calisan/{id}")]
         [Authorize(Roles = "Admin")]
-        public IActionResult CalisanGuncelle()
+        public async Task<IActionResult> CalisanGuncelle(string id)
         {
-            var calisanlar = _context.Calisanlar.Include(c => c.Kullanici).ToList();
-            return View(calisanlar);
+            var calisan = await _context.Calisanlar
+                                         .Include(c => c.Kullanici)
+                                         .FirstOrDefaultAsync(c => c.KullaniciId == id);
+            if (calisan == null) return NotFound();
+
+            ViewBag.Id = calisan.KullaniciId;
+            ViewBag.Isim = calisan.Kullanici.Isim;
+            ViewBag.Soyisim = calisan.Kullanici.Soyisim;
+            ViewBag.DogumTarihi = calisan.Kullanici.DogumTarihi;
+            ViewBag.Email = calisan.Kullanici.Email;
+            ViewBag.Telefon = calisan.Kullanici.PhoneNumber;
+            ViewBag.Cinsiyet = calisan.Kullanici.Cinsiyet;
+
+            return View();
         }
 
         [HttpPost]
@@ -198,16 +210,34 @@ namespace WebOdev.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                var errors = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage)
+                .ToList();
+
+                foreach (var error in errors)
+                {
+                    Console.WriteLine(error);
+                }
+                return Content("model invalid");
             }
 
             var calisan = await _context.Calisanlar
-                                         .Include(c => c.Kullanici)
-                                         .FirstOrDefaultAsync(c => c.KullaniciId == model.Id);
+                .Include(c => c.Kullanici)
+                .FirstOrDefaultAsync(c => c.KullaniciId == model.Id);
 
             if (calisan == null)
             {
-                return NotFound();
+                return Content("calisan not found");
+            }
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+                if(calisan.Kullanici.Email != user.Email)
+                {
+                    return Content("ayni emaile sahip zaten bir kullanıcı var!");
+                }
             }
 
             // Güncellenmiş verilerle kullanıcıyı güncelle
@@ -222,7 +252,5 @@ namespace WebOdev.Controllers
 
             return RedirectToAction("Index");
         }
-
-
     }
 }

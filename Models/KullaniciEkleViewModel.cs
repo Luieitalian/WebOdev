@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace WebOdev.Models
 {
@@ -18,10 +17,10 @@ namespace WebOdev.Models
         public string Email { get; set; }
 
         [DataType(DataType.Password, ErrorMessage = "Lütfen geçerli bir şifre giriniz!")]
-        public string Sifre { get; set; }
+        public string? Sifre { get; set; }
 
         [DataType(DataType.PhoneNumber, ErrorMessage = "Lütfen geçerli bir telefon numarası giriniz!")]
         public string Telefon { get; set; }
-        public string? Id { get; internal set; }
+        public string? Id { get; set; }
     }
 }
