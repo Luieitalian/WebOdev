@@ -1,4 +1,4 @@
-﻿@model WebOdev.Models.KullaniciEkleViewModel
+﻿@model KullaniciEkleViewModel
 
 @{
     ViewData["Title"] = "Çalışan Güncelle";
@@ -6,47 +6,48 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form method="post">
+<form asp-action="Update" method="post">
     @Html.AntiForgeryToken()
 
     <div class="form-group">
         <label asp-for="Isim" class="control-label">İsim</label>
-        <input asp-for="Isim" class="form-control" />
+        <input asp-for="Isim" value="@ViewBag.Isim" class="form-control" />
         <span asp-validation-for="Isim" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="Soyisim" class="control-label">Soyisim</label>
-        <input asp-for="Soyisim" class="form-control" />
+        <input asp-for="Soyisim" value="@ViewBag.Soyisim" class="form-control" />
         <span asp-validation-for="Soyisim" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="Email" class="control-label">Email</label>
-        <input asp-for="Email" type="email" class="form-control" />
+        <input asp-for="Email" value="@ViewBag.Email" type="email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="Telefon" class="control-label">Telefon</label>
-        <input asp-for="Telefon" class="form-control" />
+        <input asp-for="Telefon" value="@ViewBag.Telefon" class="form-control" />
         <span asp-validation-for="Telefon" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="DogumTarihi" class="control-label">Doğum Tarihi</label>
-        <input asp-for="DogumTarihi" type="date" class="form-control" />
+        <input asp-for="DogumTarihi" value="@ViewBag.DogumTarihi.ToString("yyyy-MM-dd")" type="date" class="form-control" />
         <span asp-validation-for="DogumTarihi" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="Cinsiyet" class="control-label">Cinsiyet</label>
         <select asp-for="Cinsiyet" class="form-control" asp-items="Html.GetEnumSelectList<WebOdev.Models.CinsiyetEnum>()">
-            <option value="">Cinsiyet Seçiniz</option>
+            <option value="@ViewBag.Cinsiyet">@ViewBag.Cinsiyet.ToString()</option>
         </select>
         <span asp-validation-for="Cinsiyet" class="text-danger"></span>
     </div>
 
+    <input asp-for="Id" hidden type="type" value="@ViewBag.Id" />
 
     <button type="submit" class="btn btn-primary">Güncelle</button>
 </form>
