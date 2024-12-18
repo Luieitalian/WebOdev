@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using WebOdev.Models;
 
 namespace WebOdev.Controllers
@@ -36,18 +37,34 @@ namespace WebOdev.Controllers
             return View(randevular);
         }
 
-        // Admin rolünde olanlar yalnızca çalışan ekleyebilir
-        [Authorize(Roles = "Admin, Calisan")]
-        public IActionResult IslemEkle()
+        // Calisan rolünde olanlar yalnızca işlem ekleyebilir
+        [Authorize(Roles = "Calisan")]
+        public async Task<IActionResult> IslemEkle()
         {
-            var islemler = _context.Islemler.ToList();
-            return View(islemler);
+            var user = await _userManager.GetUserAsync(User);
+
+            var yapamadigiIslemler = _context.Islemler
+                .Except(
+                    _context.CalisanIslemleri
+                        .Where(ci => ci.CalisanId == user!.Id)
+                        .Select(ci => ci.Islem)
+                )
+                .ToList();
+
+            return View(yapamadigiIslemler);
         }
 
-        [Authorize(Roles = "Admin, Calisan")]
         [HttpPost]
+        [Authorize(Roles = "Calisan")]
         public IActionResult IslemEkle(int id, int yetkinlik, string not)
         {
+            var islem = _context.Islemler.FirstOrDefault(i => i.Id == id);
+            if (islem == null)
+            {
+                TempData["Message"] = "İşlem Bulunamadı!";
+                return RedirectToAction("CalisanPaneli");
+            }
+
             var query =  from calisan in _context.Calisanlar
                          join kullanici in _userManager.Users
                          on calisan.KullaniciId equals kullanici.Id

@@ -6,13 +6,6 @@
 
 <h2>@ViewData["Title"]</h2>
 
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-info">
-        @TempData["Message"]
-    </div>
-}
-
 <form asp-action="Update" method="post">
     @Html.AntiForgeryToken()
 
