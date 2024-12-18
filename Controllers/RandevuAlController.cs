@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using System;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-
+using WebOdev.Models;
 
 namespace WebOdev.Controllers
 {
@@ -45,14 +45,30 @@ namespace WebOdev.Controllers
 
         public IActionResult Adim2()
         {
-            // TempData'dan işlem verisini al
             var islemId = HttpContext.Session.GetString("IslemId");
 
             if (islemId == null)
             {
+                TempData["Message"] = "İşlem Bulunamadı!";
                 return RedirectToAction("Adim1");
             }
-            var calisanlar = _context.Calisanlar.Include(c => c.Kullanici).ToList();
+
+            var query = from calisanislem in _context.CalisanIslemleri
+                        where calisanislem.IslemId == Convert.ToInt32(islemId) 
+                        select new
+                        {
+                            calisanislem.Calisan,
+                            calisanislem.Calisan.Kullanici,
+                            calisanislem.CalisanId
+                        };
+
+            var calisanlar = query
+                .Select(c => new CalisanModel
+                {
+                    KullaniciId = c.CalisanId,
+                    Kullanici = c.Kullanici
+                })
+                .ToList();
 
             return View(calisanlar);
         }
@@ -69,13 +85,14 @@ namespace WebOdev.Controllers
             var calisan = _context.Calisanlar.Find(calisanId);
             if (calisan == null)
             {
-                ModelState.AddModelError("", "Herhangi bir çalışan bulunamadı!");
+                TempData["Message"] = "İşlem Bulunamadı!";
                 return RedirectToAction("Adim2");
             }
 
             HttpContext.Session.SetString("CalisanId", calisan.KullaniciId);
 
             // Adım 3'e yönlendir
+            TempData["Message"] = "İşlem Bulunamadı!";
             return RedirectToAction("Adim3");
         }
 

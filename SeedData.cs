@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using WebOdev.Models;
 
 namespace WebOdev
@@ -10,6 +11,11 @@ namespace WebOdev
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<KullaniciModel>>();
             var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+
+            IslemleriEkle(context);
+            await CalisanlariEkle(roleManager, userManager, context);
+
+            #region admins
 
             // Define roles
             string[] roles = { "Admin", "Calisan", "Musteri" };
@@ -69,9 +75,8 @@ namespace WebOdev
                     await userManager.AddToRoleAsync(adminUser2, "Admin");
                 }
             }
+            #endregion
 
-            await CalisanlariEkle(roleManager, userManager, context);
-            await IslemleriEkle(context);
         }
 
         public static async Task CalisanlariEkle(RoleManager<IdentityRole> roleManager, UserManager<KullaniciModel> userManager, ApplicationDbContext context)
@@ -100,7 +105,19 @@ namespace WebOdev
                     {
                         Kullanici = serra
                     };
-                    await context.Calisanlar.AddAsync(calisan);
+                    var calisanislem = new CalisanIslemModel
+                    {
+                        Calisan = calisan,
+                        IslemId = 2,
+                        Yetkinlik = 3,
+                    };
+
+                    context.Calisanlar.Add(calisan);
+                    context.CalisanIslemleri.Add(calisanislem);
+                }
+                else
+                {
+                    Console.WriteLine("\nfailed to create user\n");
                 }
             }
 
@@ -128,7 +145,40 @@ namespace WebOdev
                     {
                         Kullanici = batukan
                     };
-                    await context.Calisanlar.AddAsync(calisan);
+                    var calisanislem = new CalisanIslemModel
+                    {
+                        Calisan = calisan,
+                        IslemId = 2,
+                        Yetkinlik = 3,
+                    };
+                    var calisanislem2 = new CalisanIslemModel
+                    {
+                        Calisan = calisan,
+                        IslemId = 4,
+                        Yetkinlik = 6,
+                    };
+                    var calisanislem3 = new CalisanIslemModel
+                    {
+                        Calisan = calisan,
+                        IslemId = 1,
+                        Yetkinlik = 8,
+                    };
+                    var calisanislem4 = new CalisanIslemModel
+                    {
+                        Calisan = calisan,
+                        IslemId = 3,
+                        Yetkinlik = 6,
+                    };
+
+                    context.Calisanlar.Add(calisan);
+                    context.CalisanIslemleri.Add(calisanislem);
+                    context.CalisanIslemleri.Add(calisanislem2);
+                    context.CalisanIslemleri.Add(calisanislem3);
+                    context.CalisanIslemleri.Add(calisanislem4);
+                }
+                else
+                {
+                    Console.WriteLine("\nfailed to create user\n");
                 }
             }
 
@@ -156,7 +206,40 @@ namespace WebOdev
                     {
                         Kullanici = kemal
                     };
-                    await context.Calisanlar.AddAsync(calisan);
+                    var calisanislem = new CalisanIslemModel
+                    {
+                        Calisan = calisan,
+                        IslemId = 7,
+                        Yetkinlik = 3,
+                    };
+                    var calisanislem2 = new CalisanIslemModel
+                    {
+                        Calisan = calisan,
+                        IslemId = 6,
+                        Yetkinlik = 6,
+                    };
+                    var calisanislem3 = new CalisanIslemModel
+                    {
+                        Calisan = calisan,
+                        IslemId = 5,
+                        Yetkinlik = 8,
+                    };
+                    var calisanislem4 = new CalisanIslemModel
+                    {
+                        Calisan = calisan,
+                        IslemId = 4,
+                        Yetkinlik = 6,
+                    };
+
+                    context.Calisanlar.Add(calisan);
+                    context.CalisanIslemleri.Add(calisanislem);
+                    context.CalisanIslemleri.Add(calisanislem2);
+                    context.CalisanIslemleri.Add(calisanislem3);
+                    context.CalisanIslemleri.Add(calisanislem4);
+                }
+                else
+                {
+                    Console.WriteLine("\nfailed to create user\n");
                 }
             }
 
@@ -184,19 +267,53 @@ namespace WebOdev
                     {
                         Kullanici = ahmet
                     };
-                    await context.Calisanlar.AddAsync(calisan);
+                    var calisanislem = new CalisanIslemModel
+                    {
+                        Calisan = calisan,
+                        IslemId = 7,
+                        Yetkinlik = 1,
+                    };
+                    var calisanislem2 = new CalisanIslemModel
+                    {
+                        Calisan = calisan,
+                        IslemId = 3,
+                        Yetkinlik = 5,
+                    };
+                    var calisanislem3 = new CalisanIslemModel
+                    {
+                        Calisan = calisan,
+                        IslemId = 2,
+                        Yetkinlik = 2,
+                    };
+                    var calisanislem4 = new CalisanIslemModel
+                    {
+                        Calisan = calisan,
+                        IslemId = 1,
+                        Yetkinlik = 2,
+                    };
+
+                    context.Calisanlar.Add(calisan);
+                    context.CalisanIslemleri.Add(calisanislem);
+                    context.CalisanIslemleri.Add(calisanislem2);
+                    context.CalisanIslemleri.Add(calisanislem3);
+                    context.CalisanIslemleri.Add(calisanislem4);
+                }
+                else
+                {
+                    Console.WriteLine("\nfailed to create user\n");
                 }
             }
 
-            await context.SaveChangesAsync();
+            context.SaveChanges();
         }
-        
-        public static async Task IslemleriEkle(ApplicationDbContext _context)
+
+        public static void IslemleriEkle(ApplicationDbContext _context)
         {
             if (_context.Islemler.Any()) return;
 
             var islem1 = new IslemModel
             {
+                Id = 1,
                 Baslik = "Kısa Dalgalı Saçlar",
                 Aciklama = "Doğal dalgalarla modern ve hacimli bir görünüm sağlar.",
                 Cinsiyet = CinsiyetEnum.Kadin,
@@ -208,6 +325,7 @@ namespace WebOdev
 
             var islem2 = new IslemModel
             {
+                Id = 2,
                 Baslik = "Sade Topuz",
                 Aciklama = "Şık ve zarif bir görünüm için düşük topuz modelidir.",
                 Cinsiyet = CinsiyetEnum.Kadin,
@@ -219,6 +337,7 @@ namespace WebOdev
 
             var islem3 = new IslemModel
             {
+                Id = 3,
                 Baslik = "Büyük Dalga Saçlar",
                 Aciklama = "Hollywood tarzı büyük ve hacimli dalgalarla dikkat çekici bir stil.",
                 Cinsiyet = CinsiyetEnum.Kadin,
@@ -230,6 +349,7 @@ namespace WebOdev
 
             var islem4 = new IslemModel
             {
+                Id = 4,
                 Baslik = "Düz ve Parlak Saç",
                 Aciklama = "Sağlıklı ve pürüzsüz bir görünüm için düzleştirilmiş uzun saçlar.",
                 Cinsiyet = CinsiyetEnum.Kadin,
@@ -241,6 +361,7 @@ namespace WebOdev
 
             var islem5 = new IslemModel
             {
+                Id = 5,
                 Baslik = "Klasik Kısa",
                 Aciklama = "Kısa, düzenli ve temiz bir kesim. Hem günlük kullanım hem de iş yerlerinde uygun.",
                 Cinsiyet = CinsiyetEnum.Erkek,
@@ -252,6 +373,7 @@ namespace WebOdev
 
             var islem6 = new IslemModel
             {
+                Id = 6,
                 Baslik = "Undercut",
                 Aciklama = "Yanlar ve arka kısım çok kısa kesilir, üst kısmı ise daha uzun bırakılır. Şık ve cesur bir stil.",
                 Cinsiyet = CinsiyetEnum.Erkek,
@@ -263,6 +385,7 @@ namespace WebOdev
 
             var islem7 = new IslemModel
             {
+                Id = 7,
                 Baslik = "Buzz Cut",
                 Aciklama = "Tamamen kısa kesilen bir modeldir. Bakımı kolay ve rahat bir seçenek.",
                 Cinsiyet = CinsiyetEnum.Erkek,
@@ -272,8 +395,9 @@ namespace WebOdev
 
             _context.Islemler.Add(islem7);
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
+
 
     }
 }
