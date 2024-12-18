@@ -68,6 +68,7 @@ namespace WebOdev.Controllers
             _context.CalisanIslemleri.Add(newcalisanislem);
             _context.SaveChanges();
 
+            TempData["Message"] = "İşlem Başarıyla Eklendi!";
             return RedirectToAction("CalisanPaneli");
         }
 
@@ -119,6 +120,7 @@ namespace WebOdev.Controllers
                 await _context.SaveChangesAsync();
 
                 // Başarılıysa çalışanlar listesine yönlendir
+                TempData["Message"] = "Çalışan Başarıyla Eklendi!";
                 return RedirectToAction("Index");
             }
             else
@@ -147,23 +149,10 @@ namespace WebOdev.Controllers
 
             if (calisan == null)
             {
-                // Eğer çalışan bulunamazsa, hata sayfasına yönlendir
-                return NotFound();
-            }
-
-            // Kullanıcıyı sil
-            var result = await _userManager.DeleteAsync(calisan.Kullanici);
-            if (!result.Succeeded)
-            {
-                // Eğer silme işlemi başarısız olursa, hataları ModelState'e ekleyin
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+                TempData["Message"] = "Çalışan Bulunamadı!";
                 return RedirectToAction("Index");
             }
 
-            // Kullanıcı silindikten sonra, çalışanın veritabanından silinmesi
             _context.Calisanlar.Remove(calisan);
 
             try
@@ -176,21 +165,39 @@ namespace WebOdev.Controllers
                 // Eğer bir concurrency hatası alırsanız, burayı yakalayabilirsiniz
                 ModelState.AddModelError(string.Empty, "Veri güncellenirken bir hata oluştu.");
                 _logger.LogError(ex, "Concurrency exception occurred while saving changes.");
+                TempData["Message"] = "Çalışan Silinemedi!";
                 return RedirectToAction("Index");
             }
 
-            // Başarılıysa, çalışanlar listesine yönlendir
+            // Kullanıcıyı sil
+            var result = await _userManager.DeleteAsync(calisan.Kullanici);
+            if (!result.Succeeded)
+            {
+                // Eğer silme işlemi başarısız olursa, hataları ModelState'e ekleyin
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                TempData["Message"] = "Çalışan(Kullanıcı) Silinemedi!";
+                return RedirectToAction("Index");
+            } 
+
+            TempData["Message"] = "Çalışan Başarıyla Silindi!";
             return RedirectToAction("Index");
         }
 
-        [HttpGet("Calisan/{id}")]
+        [HttpGet("Calisan/Guncelle/{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CalisanGuncelle(string id)
         {
             var calisan = await _context.Calisanlar
                                          .Include(c => c.Kullanici)
                                          .FirstOrDefaultAsync(c => c.KullaniciId == id);
-            if (calisan == null) return NotFound();
+            if (calisan == null) 
+            {
+                TempData["Message"] = "Çalışan Bulunamadı! Lütfen Daha Sonra Tekrar Deneyiniz.";
+                return RedirectToAction("Index");
+            }
 
             ViewBag.Id = calisan.KullaniciId;
             ViewBag.Isim = calisan.Kullanici.Isim;
@@ -219,7 +226,8 @@ namespace WebOdev.Controllers
                 {
                     Console.WriteLine(error);
                 }
-                return Content("model invalid");
+                TempData["Message"] = "Çalışan Bulunamadı! Lütfen Daha Sonra Tekrar Deneyiniz.";
+                return RedirectToAction("CalisanGuncelle");
             }
 
             var calisan = await _context.Calisanlar
@@ -228,7 +236,8 @@ namespace WebOdev.Controllers
 
             if (calisan == null)
             {
-                return Content("calisan not found");
+                TempData["Message"] = "Çalışan Bulunamadı!";
+                return RedirectToAction("CalisanGuncelle");
             }
 
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -236,7 +245,8 @@ namespace WebOdev.Controllers
             {
                 if(calisan.Kullanici.Email != user.Email)
                 {
-                    return Content("ayni emaile sahip zaten bir kullanıcı var!");
+                    TempData["Message"] = "Email Kullanımda!";
+                    return RedirectToAction("CalisanGuncelle");
                 }
             }
 
@@ -249,7 +259,8 @@ namespace WebOdev.Controllers
             calisan.Kullanici.Cinsiyet = model.Cinsiyet;
 
             await _context.SaveChangesAsync();
-
+            
+            TempData["Message"] = "Güncelleme Başarılı!";
             return RedirectToAction("Index");
         }
     }
