@@ -18,6 +18,13 @@
 
 </div>
 
+@if (TempData["Message"] != null)
+{
+	<div class="alert alert-info">
+		@TempData["Message"]
+	</div>
+}
+
 <!-- Çalışanlar Tablosu -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
@@ -44,7 +51,7 @@
 					<td>@calisan.Kullanici.Cinsiyet.ToString()</td>
 					<td>
 						<!-- Silme Butonu -->
-						<form method="post" action="@Url.Action("Sil", "Calisan", new { id = calisan.KullaniciId })"
+						<form method="post" action="@Url.Action("Delete", "Calisan", new { id = calisan.KullaniciId })"
 							  onsubmit="return confirm('Çalışanı silmek istediğinizden emin misiniz?');" class="d-inline">
 							@Html.AntiForgeryToken()
 							<button type="submit" class="btn btn-danger btn-sm">
