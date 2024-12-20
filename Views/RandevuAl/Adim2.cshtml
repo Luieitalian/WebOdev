@@ -5,6 +5,13 @@
 
 <h2 class="mb-4">@ViewData["Title"]</h2>
 
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Message"]
+    </div>
+}
+
 <form asp-action="Adim2" method="post" class="form-group mb-3">
     <label class="form-label">Çalışan</label>
     <select name="calisanId" class="form-control" aria-label="Çalışan Seçimi">

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using System;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-
+using WebOdev.Models;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebOdev.Controllers
 {
@@ -10,7 +12,7 @@ namespace WebOdev.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public RandevuAlController(ApplicationDbContext context, IMapper mapper)
+        public RandevuAlController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -45,14 +47,30 @@ namespace WebOdev.Controllers
 
         public IActionResult Adim2()
         {
-            // TempData'dan işlem verisini al
             var islemId = HttpContext.Session.GetString("IslemId");
 
             if (islemId == null)
             {
+                TempData["Message"] = "İşlem Bulunamadı!";
                 return RedirectToAction("Adim1");
             }
-            var calisanlar = _context.Calisanlar.Include(c => c.Kullanici).ToList();
+
+            var query = from calisanislem in _context.CalisanIslemleri
+                        where calisanislem.IslemId == Convert.ToInt32(islemId) 
+                        select new
+                        {
+                            calisanislem.Calisan,
+                            calisanislem.Calisan.Kullanici,
+                            calisanislem.CalisanId
+                        };
+
+            var calisanlar = query
+                .Select(c => new CalisanModel
+                {
+                    KullaniciId = c.CalisanId,
+                    Kullanici = c.Kullanici
+                })
+                .ToList();
 
             return View(calisanlar);
         }
@@ -69,25 +87,75 @@ namespace WebOdev.Controllers
             var calisan = _context.Calisanlar.Find(calisanId);
             if (calisan == null)
             {
-                ModelState.AddModelError("", "Herhangi bir çalışan bulunamadı!");
+                TempData["Message"] = "Çalışan Bulunamadı!";
                 return RedirectToAction("Adim2");
             }
 
             HttpContext.Session.SetString("CalisanId", calisan.KullaniciId);
 
-            // Adım 3'e yönlendir
             return RedirectToAction("Adim3");
         }
 
         public IActionResult Adim3()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Adim3(DateTime tarih, TimeSpan saat)
+        {
+            if (!ModelState.IsValid) {
+                TempData["Message"] = "Model State Geçersiz!";
+                return RedirectToAction("Adim3");
+            }
             var islemid = HttpContext.Session.GetString("IslemId");
             var calisanid = HttpContext.Session.GetString("CalisanId");
-            
-            Console.WriteLine("İşlem id" + islemid);
-            Console.WriteLine("calisan id" + calisanid);
-            // TO BE CONTINUED
-            return View();
+
+            if(islemid == null || calisanid == null)
+            {
+                Console.WriteLine("İşlem id " + islemid);
+                Console.WriteLine("calisan id " + calisanid);
+                TempData["Message"] = "İşlem veya Çalışan Geçersiz!";
+                return RedirectToAction("Adim3");
+            }
+
+            var islem = _context.Islemler.Find(Convert.ToInt32(islemid));
+            if (islem == null)
+            {
+                TempData["Message"] = "İşlem Bulunamadı!";
+                return RedirectToAction("Adim2");
+            }
+
+            DateTime randevuBaslangicTarihi = tarih;
+            DateTime randevuBitisTarihi = tarih + islem.Uzunluk;
+
+            var query = from or in _context.OnayliRandevular
+                        join randevu in _context.Randevular
+                        on or.RandevuId equals randevu.Id
+                        join calisan in _context.Calisanlar
+                        on randevu.CalisanId equals calisan.KullaniciId
+                        select new
+                        {
+                            randevu.BaslangicTarihi,
+                            randevu.BitisTarihi
+                        };
+
+            var list = query.ToList();
+            if (list.Count > 0) 
+            {
+                foreach (var item in list)
+                {
+                    if((item.BaslangicTarihi > randevuBaslangicTarihi && randevuBitisTarihi > item.BaslangicTarihi)
+                     || (item.BaslangicTarihi < randevuBaslangicTarihi && item.BitisTarihi > randevuBaslangicTarihi))
+                    {
+                        TempData["Message"] = "Randevu Alınmış!";
+                        return RedirectToAction("Adim3");
+                    }
+                }
+            }
+
+            TempData["Message"] = "Randevu Çalışan Onayına Gönderilmiştir!";
+            return RedirectToAction("Randevularim", "Randevu");
         }
     }
 }
