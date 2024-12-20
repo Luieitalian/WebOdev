@@ -49,7 +49,7 @@ namespace WebOdev.Controllers
                     await _context.Musteriler.AddAsync(newmusteri);
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Anasayfa");
                 }
 
                 foreach (var error in result.Errors)

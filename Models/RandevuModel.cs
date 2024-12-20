@@ -8,8 +8,11 @@ namespace WebOdev.Models
     {
         [Key]
         public int Id { get; set; }
+        [DataType(DataType.DateTime)]
         public DateTime? IstemTarihi { get; set; }
+        [DataType(DataType.DateTime)]
         public DateTime? BaslangicTarihi { get; set; }
+        [DataType(DataType.DateTime)]
         public DateTime? BitisTarihi { get; set; }
         public CalisanModel? Calisan { get; set; }
         public string? CalisanId { get; set; }

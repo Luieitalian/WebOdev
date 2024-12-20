@@ -1,0 +1,65 @@
+﻿@model IEnumerable<RandevuModel>
+@{
+    ViewData["Title"] = "Randevularım";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Message"]
+    </div>
+}
+
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        @foreach (var randevu in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Randevu ID: @randevu.Id</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>İstem Tarihi:</strong> @randevu.IstemTarihi?.ToString("yyyy-MM-dd HH:mm")</p>
+                        <p><strong>Başlangıç Tarihi:</strong> @randevu.BaslangicTarihi?.ToString("yyyy-MM-dd HH:mm")</p>
+                        <p><strong>Bitiş Tarihi:</strong> @randevu.BitisTarihi?.ToString("yyyy-MM-dd HH:mm")</p>
+
+                        @if (randevu.Calisan != null)
+                        {
+                            <p><strong>Çalışan:</strong> @randevu.Calisan.Kullanici.Isim @randevu.Calisan.Kullanici.Soyisim</p>
+                        }
+                        else
+                        {
+                            <p><strong>Çalışan:</strong> N/A</p>
+                        }
+
+                        @if (randevu.Islem != null)
+                        {
+                            <p><strong>İşlem:</strong> @randevu.Islem.Baslik</p>
+                        }
+                        else
+                        {
+                            <p><strong>İşlem:</strong> N/A</p>
+                        }
+
+                        @if (randevu.Musteri != null)
+                        {
+                            <p><strong>Müşteri:</strong> @randevu.Musteri.Kullanici.Isim @randevu.Musteri.Kullanici.Soyisim</p>
+                        }
+                        else
+                        {
+                            <p><strong>Müşteri:</strong> N/A</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>Randevu bulunamadı.</p>
+}

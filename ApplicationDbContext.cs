@@ -33,13 +33,11 @@ namespace WebOdev
             modelBuilder.Entity<CalisanIslemModel>()
                 .HasKey(pa => new { pa.CalisanId, pa.IslemId });
 
-            // Foreign Key Relationship: Personnel -> PersonnelAbility
             modelBuilder.Entity<CalisanIslemModel>()
                 .HasOne(pa => pa.Calisan)
                 .WithMany(p => p.CalisanIslemleri)
                 .HasForeignKey(pa => pa.CalisanId);
 
-            // Foreign Key Relationship: Ability -> PersonnelAbility
             modelBuilder.Entity<CalisanIslemModel>()
                 .HasOne(pa => pa.Islem)
                 .WithMany(a => a.CalisanIslemleri)
