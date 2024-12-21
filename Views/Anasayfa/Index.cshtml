@@ -1,58 +1,98 @@
-﻿@* 
-    <style>
-        /* Tüm sayfa genel ayarları */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-image: url('/images/2.png'); /* Görselin adını ve yolunu düzenleyin */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            color: white;
-            background-image: url('/images/2.png');
-        }
+﻿@{
+    ViewData["Title"] = "Ana Sayfa";
+}
 
-        /* Üstüne hafif karartma efekti ekleyelim */
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Karartma efekti */
-            z-index: 1;
-        }
-
-        /* Sayfa içeriği */
-        .content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-            .content h1 {
-                font-size: 48px;
-                margin-bottom: 20px;
-                text-transform: uppercase;
-            }
-
-            .content p {
-                font-size: 18px;
-                line-height: 1.5;
-            }
-    </style>
-
-    <!-- Arka plan üzerine karartma efekti -->
-    <div class="overlay"></div>
-
-    <!-- Ana içerik -->
-    <div class="content">
-        <h1>Hoş Geldiniz</h1>
-        <p>Kuaför salonumuzda profesyonel hizmetler sunuyoruz. Randevu alın ve kendinizi özel hissedin.</p>
+<!-- Slider Başlangıç -->
+<div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
-
- *@
+    <div class="carousel-inner">
+        <!-- İlk Slide -->
+        <div class="carousel-item active">
+            <img src="@Url.Content("~/images/sac-kesimi.jpg")" class="d-block w-100" alt="Saç Kesimi" loading="lazy">
+            <div class="slider-title">
+                <h1>Profesyonel Saç Kesimi</h1>
+                <p>Modern ve klasik tarzlarda uzman kesimler.</p>
+            </div>
+        </div>
+        <!-- İkinci Slide -->
+        <div class="carousel-item">
+            <img src="@Url.Content("~/images/sac-sekillendirme.jpg")" class="d-block w-100" alt="Saç Şekillendirme" loading="lazy">
+            <div class="slider-title">
+                <h1>Saç Şekillendirme</h1>
+                <p>Profesyonel ürünlerle sağlıklı ve parlak saçlar.</p>
+            </div>
+        </div>
+        <!-- Üçüncü Slide -->
+        <div class="carousel-item">
+            <img src="@Url.Content("~/images/berber-hizmeti.jpg")" class="d-block w-100" alt="Berber Hizmeti" loading="lazy">
+            <div class="slider-title">
+                <h1>Berber Hizmetleri</h1>
+                <p>Erkeklere özel kesim ve bakımlar.</p>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Önceki</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Sonraki</span>
+    </button>
+</div>
+<!-- Slider Sonu -->
+<!-- Kartlar Başlangıç -->
+<div class="container my-5">
+    <div class="row">
+        <!-- Çalışanlar Kartı -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="card-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <h5 class="card-title">Çalışanlar</h5>
+                    <p class="card-text">Ekibimiz hakkında bilgi edinin ve çalışanlarımızı tanıyın.</p>
+                </div>
+                <div class="card-footer">
+                    <a asp-controller="Calisan" asp-action="Index" class="btn btn-primary">Daha Fazla</a>
+                </div>
+            </div>
+        </div>
+        <!-- İşlemler Kartı -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="card-icon">
+                        <i class="bi bi-gear-fill"></i>
+                    </div>
+                    <h5 class="card-title">İşlemler</h5>
+                    <p class="card-text">Yürüttüğümüz işlemler ve sunduğumuz hizmetler hakkında bilgi alın.</p>
+                </div>
+                <div class="card-footer">
+                    <a asp-controller="Islem" asp-action="Index" class="btn btn-primary">Daha Fazla</a>
+                </div>
+            </div>
+        </div>
+        <!-- Randevular Kartı -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="card-icon">
+                        <i class="bi bi-calendar-check-fill"></i>
+                    </div>
+                    <h5 class="card-title">Randevular</h5>
+                    <p class="card-text">Randevu almak ve yönetmek için gerekli adımları öğrenin.</p>
+                </div>
+                <div class="card-footer">
+                    <a asp-controller="Randevu" asp-action="Index" class="btn btn-primary">Daha Fazla</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Kartlar Sonu -->
