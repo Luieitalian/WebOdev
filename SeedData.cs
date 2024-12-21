@@ -340,7 +340,7 @@ namespace WebOdev
             var islem3 = new IslemModel
             {
                 Id = 3,
-                Baslik = "Büyük Dalga Saçlar",
+                Baslik = "Büyük Dalgalı Saçlar",
                 Aciklama = "Hollywood tarzı büyük ve hacimli dalgalarla dikkat çekici bir stil.",
                 Cinsiyet = CinsiyetEnum.Kadin,
                 Ucret = 250,

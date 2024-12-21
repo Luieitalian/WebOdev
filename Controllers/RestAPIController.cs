@@ -5,9 +5,23 @@ namespace WebOdev.Controllers
     [ApiController]
     public class RestAPIController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+
+        public RestAPIController(ApplicationDbContext context)
         {
-            return View();
+            _context = context;
+        }
+
+        [HttpGet("/api/hizmetler/{id}")]
+        public IActionResult Hizmetler(string id)
+        {
+            var islem = _context.Islemler.FirstOrDefault(i => i.Id == Convert.ToInt32(id));
+            if (islem == null)
+            {
+                return Content("İşlem Bulunamadı!");
+            }
+
+            return new JsonResult(islem);
         }
     }
 }

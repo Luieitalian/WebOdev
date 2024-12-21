@@ -20,15 +20,15 @@ namespace WebOdev.Controllers
             return View();
         }
 
+        public IActionResult API()
+        {
+            return View();
+        }
+
         public IActionResult Hizmetlerimiz()
         {
             var islemler = _context.Islemler.ToList();
             return View(islemler);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
