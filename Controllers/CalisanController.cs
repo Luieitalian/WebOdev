@@ -32,8 +32,27 @@ namespace WebOdev.Controllers
         [Authorize(Roles = "Calisan")]
         public IActionResult CalisanPaneli()
         {
-            // Çalışanları listelerken ilişkili kullanıcı bilgilerini de getiriyoruz
-            var randevular = _context.Randevular.Include(c => c.Islem).Include(c => c.Musteri).ToList();
+            var userID = _userManager.GetUserId(User);
+
+            var query = from r in _context.Randevular
+                        join m in _context.Musteriler.Include(m => m.Kullanici)
+                        on r.MusteriId equals m.KullaniciId
+                        join c in _context.Calisanlar.Include(c => c.Kullanici)
+                        on userID equals c.KullaniciId
+                        select new RandevuModel
+                        {
+                            Calisan = c,
+                            Musteri = m,
+                            Islem = r.Islem,
+                            BaslangicTarihi = r.BaslangicTarihi,
+                            BitisTarihi = r.BitisTarihi,
+                            IstemTarihi = r.IstemTarihi,
+                            Durum = r.Durum,
+                            Id = r.Id
+                        };
+
+            var randevular = query.ToList();
+
             return View(randevular);
         }
 

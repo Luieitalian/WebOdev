@@ -20,22 +20,60 @@
         </div>
     </div>
     <h3 class="text-center mb-4">Randevular</h3>
-    <div class="row">
-        @foreach (var randevu in Model)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="card-title mb-0">@randevu.Id</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text"><strong>Yer:</strong> @randevu.IstemTarihi.ToString()</p>
-                        <p class="card-text"><strong>Tarih:</strong> @randevu.BaslangicTarihi.ToString()</p>
-                        <p class="card-text"><strong>Tarih:</strong> @randevu.BitisTarihi.ToString()</p>
-                        <p class="card-text"><strong>Saat:</strong> @randevu.Islem.Uzunluk.ToString(@"hh\:mm")</p>
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var randevu in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Randevu ID: @randevu.Id</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>İstem Tarihi:</strong> @randevu.IstemTarihi?.ToString("yyyy-MM-dd HH:mm")</p>
+                            <p><strong>Başlangıç Tarihi:</strong> @randevu.BaslangicTarihi?.ToString("yyyy-MM-dd HH:mm")</p>
+                            <p><strong>Bitiş Tarihi:</strong> @randevu.BitisTarihi?.ToString("yyyy-MM-dd HH:mm")</p>
+
+                            @if (randevu.Islem != null)
+                            {
+                                <p><strong>İşlem:</strong> @randevu.Islem.Baslik</p>
+                            }
+                            else
+                            {
+                                <p><strong>İşlem:</strong> N/A</p>
+                            }
+
+                            @if (randevu.Musteri != null)
+                            {
+                                <p><strong>Müşteri:</strong> @randevu.Musteri.Kullanici.Isim @randevu.Musteri.Kullanici.Soyisim</p>
+                            }
+                            else
+                            {
+                                <p><strong>Müşteri:</strong> N/A</p>
+                            }
+
+                            @if (randevu.Durum == RandevuModel.RandevuDurum.Onaylanmis)
+                            {
+                                <p><strong class="alert-success">Durum:</strong> Onaylandı.</p>
+                            }
+                            else if (randevu.Durum == RandevuModel.RandevuDurum.OnayBekliyor)
+                            {
+                                <p><strong class="alert-warning">Durum:</strong> Onay Bekliyor...</p>
+                            }
+                            else if (randevu.Durum == RandevuModel.RandevuDurum.Reddedilmis)
+                            {
+                                <p><strong class="alert-danger">Durum:</strong> Reddedildi.</p>
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
+            }
+        </div>
+
+    }
+    else
+    {
+        <p>Randevu bulunamadı.</p>
+    }
 </div>

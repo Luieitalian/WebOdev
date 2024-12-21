@@ -34,18 +34,28 @@ namespace WebOdev.Controllers
             return View(randevular);
         }
 
-        [Authorize(Roles = "Musteri")]
+        [Authorize(Roles = "Musteri, Calisan")]
         public IActionResult Randevularim()
         {
             var userID = _userManager.GetUserId(User);
 
             var query = from r in _context.Randevular
-                        join m in _context.Musteriler
+                        join m in _context.Musteriler.Include(m => m.Kullanici)
                         on userID equals m.KullaniciId
-                        select r;
-            // TODO
-            var randevular = query.ToList();
+                        join c in _context.Calisanlar.Include(c => c.Kullanici)
+                        on r.CalisanId equals c.KullaniciId
+                        select new RandevuModel
+                        {
+                            Calisan = c,
+                            Musteri = m,
+                            Islem = r.Islem,
+                            BaslangicTarihi = r.BaslangicTarihi,
+                            BitisTarihi = r.BitisTarihi,
+                            IstemTarihi = r.IstemTarihi,
+                            Durum = r.Durum
+                        };
 
+            var randevular = query.ToList();
             return View(randevular);
         }
     }
