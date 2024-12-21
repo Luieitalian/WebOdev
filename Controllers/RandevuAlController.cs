@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using WebOdev.Models;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebOdev.Controllers
 {
@@ -21,12 +22,17 @@ namespace WebOdev.Controllers
 
         public IActionResult Adim1()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Giris");
+            }
+
             var islemler = _context.Islemler.ToList();
             return View(islemler);
         }
 
         // POST: Adım 1
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Musteri, Calisan")]
         public IActionResult Adim1(int islemId)
         {
             if (!ModelState.IsValid)
@@ -47,6 +53,7 @@ namespace WebOdev.Controllers
             return RedirectToAction("Adim2");
         }
 
+        [Authorize(Roles = "Musteri, Calisan")]
         public IActionResult Adim2()
         {
             var islemId = HttpContext.Session.GetString("IslemId");
@@ -78,7 +85,7 @@ namespace WebOdev.Controllers
         }
 
         // POST: Adım 2
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Musteri, Calisan")]
         public IActionResult Adim2(string calisanId)
         {
             if (!ModelState.IsValid)
@@ -98,12 +105,13 @@ namespace WebOdev.Controllers
             return RedirectToAction("Adim3");
         }
 
+        [Authorize(Roles = "Musteri, Calisan")]
         public IActionResult Adim3()
         {
             return View();
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Musteri, Calisan")]
         public IActionResult Adim3(DateTime tarih)
         {
             if (!ModelState.IsValid) {
@@ -182,13 +190,7 @@ namespace WebOdev.Controllers
                 BaslangicTarihi = randevuBaslangicTarihi,
                 BitisTarihi = randevuBitisTarihi,
                 Durum = RandevuModel.RandevuDurum.OnayBekliyor
-            };//?????? TODO
-
-            Console.WriteLine(randevuModel.Musteri.Kullanici.Isim);
-            Console.WriteLine(randevuModel.Musteri.Kullanici.Isim);
-            Console.WriteLine(randevuModel.Musteri.Kullanici.Isim);
-            Console.WriteLine(randevuModel.Musteri.Kullanici.Isim);
-            Console.WriteLine(randevuModel.Musteri.Kullanici.Isim);
+            };
 
             _context.Randevular.Add(randevuModel);
             _context.SaveChanges();

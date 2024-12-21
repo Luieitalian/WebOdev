@@ -1,0 +1,36 @@
+﻿@model IEnumerable<IslemModel>
+@{
+	ViewData["Title"] = "Hizmetlerimiz";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["Message"] != null)
+{
+	<div class="alert alert-info">
+		@TempData["Message"]
+	</div>
+}
+
+@if (Model != null && Model.Any())
+{
+	<div class="row">
+		@foreach (var islem in Model)
+		{
+			<div class="col-md-3 mb-2">
+				<div class="card h-100">
+					<img src="@islem.ImageURL" class="card-img-top" alt="Haircut image">
+					<div class="card-body d-flex flex-column">
+						<h5 class="card-title">@islem.Baslik</h5>
+						<p class="card-text">@islem.Aciklama</p>
+						<ul class="list-unstyled">
+							<li><strong>İşlem Uzunluğu:</strong> @islem.Uzunluk.ToString(@"hh\:mm")</li>
+							<li><strong>Ücret:</strong> ₺@islem.Ucret</li>
+						</ul>
+						<a href="@Url.Action("Adim1","RandevuAl")" class="btn btn-primary mt-auto">Randevu Al</a>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+}
