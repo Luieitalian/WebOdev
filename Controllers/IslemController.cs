@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebOdev.Models;
 
 namespace WebOdev.Controllers
@@ -12,15 +13,18 @@ namespace WebOdev.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin, Calisan")]
         public IActionResult Index()
         {
             var islemler = _context.Islemler.ToList();
             return View(islemler);
         }
 
+        [Authorize(Roles = "Admin, Calisan")]
         public IActionResult IslemEkle() { return View(); }
 
         [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Calisan")]
         public IActionResult Create(IslemModel islem)
         {
             if (ModelState.IsValid)
