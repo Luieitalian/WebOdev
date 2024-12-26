@@ -65,16 +65,16 @@ namespace WebOdev
                 }
             }
 
-            string adminPassword2 = "Admin2@123";
-            var user2 = await userManager.FindByEmailAsync(adminUser2.Email);
-            if (user2 == null)
-            {
-                var createAdmin2 = await userManager.CreateAsync(adminUser2, adminPassword2);
-                if (createAdmin2.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(adminUser2, "Admin");
-                }
-            }
+            //string adminPassword2 = "Admin2@123";
+            //var user2 = await userManager.FindByEmailAsync(adminUser2.Email);
+            //if (user2 == null)
+            //{
+            //    var createAdmin2 = await userManager.CreateAsync(adminUser2, adminPassword2);
+            //    if (createAdmin2.Succeeded)
+            //    {
+            //        await userManager.AddToRoleAsync(adminUser2, "Admin");
+            //    }
+            //}
             #endregion
 
         }
