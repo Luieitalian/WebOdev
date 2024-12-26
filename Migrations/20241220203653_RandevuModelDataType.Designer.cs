@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebOdev;
@@ -11,9 +12,11 @@ using WebOdev;
 namespace WebOdev.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241220203653_RandevuModelDataType")]
+    partial class RandevuModelDataType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,6 +197,7 @@ namespace WebOdev.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Aciklama")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Baslik")
@@ -202,9 +206,6 @@ namespace WebOdev.Migrations
 
                     b.Property<int>("Cinsiyet")
                         .HasColumnType("integer");
-
-                    b.Property<string>("ImageURL")
-                        .HasColumnType("text");
 
                     b.Property<int>("Ucret")
                         .HasColumnType("integer");

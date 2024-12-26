@@ -32,8 +32,27 @@ namespace WebOdev.Controllers
         [Authorize(Roles = "Calisan")]
         public IActionResult CalisanPaneli()
         {
-            // Çalışanları listelerken ilişkili kullanıcı bilgilerini de getiriyoruz
-            var randevular = _context.Randevular.Include(c => c.Islem).Include(c => c.Musteri).ToList();
+            var userID = _userManager.GetUserId(User);
+
+            var query = from r in _context.Randevular
+                        join m in _context.Musteriler.Include(m => m.Kullanici)
+                        on r.MusteriId equals m.KullaniciId
+                        join c in _context.Calisanlar.Include(c => c.Kullanici)
+                        on userID equals c.KullaniciId
+                        select new RandevuModel
+                        {
+                            Calisan = c,
+                            Musteri = m,
+                            Islem = r.Islem,
+                            BaslangicTarihi = r.BaslangicTarihi,
+                            BitisTarihi = r.BitisTarihi,
+                            IstemTarihi = r.IstemTarihi,
+                            Durum = r.Durum,
+                            Id = r.Id
+                        };
+
+            var randevular = query.ToList();
+
             return View(randevular);
         }
 
@@ -279,6 +298,57 @@ namespace WebOdev.Controllers
             
             TempData["Message"] = "Güncelleme Başarılı!";
             return RedirectToAction("Index");
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult OnaylaReddet(string randevuId, string deger)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Message"] = "Değer Geçersiz!";
+                return RedirectToAction("CalisanPaneli");
+            }
+
+            var randevu = _context.Randevular.FirstOrDefault(r => r.Id == Convert.ToInt32(randevuId));
+            if (randevu == null)
+            {
+                TempData["Message"] = "Randevu Bulunamadı!";
+                return RedirectToAction("CalisanPaneli");
+            }
+
+            if (randevu.Durum != RandevuModel.RandevuDurum.OnayBekliyor)
+            {
+                TempData["Message"] = "Randevu Zaten Onaylanmış ya da Reddedilmiş!";
+                return RedirectToAction("CalisanPaneli");
+            }
+
+            if(deger == "onay")
+            {
+                var onayli_randevu = new OnayliRandevuModel
+                {
+                    Randevu = randevu,
+                    RandevuId = Convert.ToInt32(randevuId)
+                };
+
+                randevu.Durum = RandevuModel.RandevuDurum.Onaylanmis;
+
+                _context.OnayliRandevular.Add(onayli_randevu);
+                _context.SaveChanges();
+
+                TempData["Message"] = "Randevu Onaylandı!";
+                return RedirectToAction("CalisanPaneli");
+            }
+            else if(deger == "ret")
+            {
+                randevu.Durum = RandevuModel.RandevuDurum.Reddedilmis;
+
+                _context.SaveChanges();
+
+                TempData["Message"] = "Randevu Reddedildi!";
+                return RedirectToAction("CalisanPaneli");
+            }
+
+            return View();
         }
     }
 }

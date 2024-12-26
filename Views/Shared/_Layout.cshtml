@@ -20,7 +20,7 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">HairStylist</a>
+                <a class="navbar-brand fs-3" href="#">HairStylist</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -28,6 +28,9 @@
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link nav-link-custom" asp-area="" asp-controller="Anasayfa" asp-action="Index">Anasayfa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" style="color:white" asp-area="" asp-controller="Anasayfa" asp-action="Hizmetlerimiz">Hizmetlerimiz</a>
                         </li>
                         @if (User.IsInRole("Admin"))
                         {
@@ -52,6 +55,9 @@
                             <li class="nav-item">
                                 <a class="nav-link nav-link-custom" asp-area="" asp-controller="RandevuAl" asp-action="Adim1">Randevu Al</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="color:white" asp-area="" asp-controller="Randevu" asp-action="Randevularim">Randevularım</a>
+                            </li>
                         }
                         @if (!User.Identity.IsAuthenticated)
                         {
@@ -68,12 +74,7 @@
                                 <a class="nav-link nav-link-custom" asp-area="" asp-controller="Giris" asp-action="CikisYap">Çıkış Yap</a>
                             </li>
                         }
-                        <!-- "About" ve "Dropdown" bölümleri kaldırıldı -->
                     </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-sm-2" type="search" placeholder="Search">
-                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                    </form>
                 </div>
             </div>
         </nav>
@@ -86,7 +87,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - WebOdev - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - WebOdev - <a asp-area="" asp-controller="Anasayfa" asp-action="API">API Hizmeti</a>
         </div>
     </footer>
     @* JavaScript Dosyaları *@

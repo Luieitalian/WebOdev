@@ -25,7 +25,7 @@ namespace WebOdev.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> KayitOl(string email, string password)
+        public async Task<IActionResult> KayitOl(string isim, string soyisim, string email, string password)
         {
             if (ModelState.IsValid)
             {
@@ -33,6 +33,8 @@ namespace WebOdev.Controllers
                 {
                     UserName = email,
                     Email = email,
+                    Isim = isim,
+                    Soyisim = soyisim,
                 };
 
                 var result = await _userManager.CreateAsync(user, password);

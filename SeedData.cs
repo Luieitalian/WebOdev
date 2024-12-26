@@ -318,7 +318,8 @@ namespace WebOdev
                 Aciklama = "Doğal dalgalarla modern ve hacimli bir görünüm sağlar.",
                 Cinsiyet = CinsiyetEnum.Kadin,
                 Ucret = 150,
-                Uzunluk = TimeSpan.FromMinutes(20)
+                Uzunluk = TimeSpan.FromMinutes(20),
+                ImageURL = "https://static.vecteezy.com/system/resources/previews/049/085/400/non_2x/young-woman-with-wavy-hair-wearing-white-t-shirt-poses-against-a-plain-background-free-photo.jpeg"
             };
 
             _context.Islemler.Add(islem1);
@@ -330,7 +331,8 @@ namespace WebOdev
                 Aciklama = "Şık ve zarif bir görünüm için düşük topuz modelidir.",
                 Cinsiyet = CinsiyetEnum.Kadin,
                 Ucret = 250,
-                Uzunluk = TimeSpan.FromMinutes(30)
+                Uzunluk = TimeSpan.FromMinutes(30),
+                ImageURL = "https://static.vecteezy.com/system/resources/previews/031/299/513/non_2x/a-beautiful-bride-with-a-bun-hairstyles-for-long-hair-look-from-back-a-female-hairstyle-rear-view-concept-by-ai-generated-free-photo.jpg"
             };
 
             _context.Islemler.Add(islem2);
@@ -338,11 +340,12 @@ namespace WebOdev
             var islem3 = new IslemModel
             {
                 Id = 3,
-                Baslik = "Büyük Dalga Saçlar",
+                Baslik = "Büyük Dalgalı Saçlar",
                 Aciklama = "Hollywood tarzı büyük ve hacimli dalgalarla dikkat çekici bir stil.",
                 Cinsiyet = CinsiyetEnum.Kadin,
                 Ucret = 250,
-                Uzunluk = TimeSpan.FromMinutes(30)
+                Uzunluk = TimeSpan.FromMinutes(30),
+                ImageURL = "https://static.vecteezy.com/system/resources/previews/045/891/019/non_2x/woman-with-long-blonde-hair-seen-from-behind-free-photo.jpeg"
             };
 
             _context.Islemler.Add(islem3);
@@ -354,7 +357,8 @@ namespace WebOdev
                 Aciklama = "Sağlıklı ve pürüzsüz bir görünüm için düzleştirilmiş uzun saçlar.",
                 Cinsiyet = CinsiyetEnum.Kadin,
                 Ucret = 200,
-                Uzunluk = TimeSpan.FromMinutes(20)
+                Uzunluk = TimeSpan.FromMinutes(20),
+                ImageURL = "https://static.vecteezy.com/system/resources/previews/034/923/792/non_2x/back-view-of-a-beautiful-young-woman-with-long-healthy-hair-on-a-dark-background-rear-view-of-a-beautiful-woman-with-long-straight-hair-blond-girl-ai-generated-free-photo.jpg"
             };
 
             _context.Islemler.Add(islem4);
@@ -366,7 +370,8 @@ namespace WebOdev
                 Aciklama = "Kısa, düzenli ve temiz bir kesim. Hem günlük kullanım hem de iş yerlerinde uygun.",
                 Cinsiyet = CinsiyetEnum.Erkek,
                 Ucret = 200,
-                Uzunluk = TimeSpan.FromMinutes(10)
+                Uzunluk = TimeSpan.FromMinutes(10),
+                ImageURL = "https://static.vecteezy.com/system/resources/previews/053/631/100/non_2x/a-man-in-a-white-shirt-looking-up-free-photo.jpeg"
             };
 
             _context.Islemler.Add(islem5);
@@ -378,7 +383,8 @@ namespace WebOdev
                 Aciklama = "Yanlar ve arka kısım çok kısa kesilir, üst kısmı ise daha uzun bırakılır. Şık ve cesur bir stil.",
                 Cinsiyet = CinsiyetEnum.Erkek,
                 Ucret = 100,
-                Uzunluk = TimeSpan.FromMinutes(15)
+                Uzunluk = TimeSpan.FromMinutes(15),
+                ImageURL = "https://static.vecteezy.com/system/resources/previews/030/703/495/non_2x/man-hair-style-from-back-side-free-photo.jpg"
             };
 
             _context.Islemler.Add(islem6);
@@ -390,14 +396,13 @@ namespace WebOdev
                 Aciklama = "Tamamen kısa kesilen bir modeldir. Bakımı kolay ve rahat bir seçenek.",
                 Cinsiyet = CinsiyetEnum.Erkek,
                 Ucret = 100,
-                Uzunluk = TimeSpan.FromMinutes(10)
+                Uzunluk = TimeSpan.FromMinutes(10),
+                ImageURL = "https://static.vecteezy.com/system/resources/previews/048/988/824/non_2x/casual-male-fashion-model-in-soft-green-t-shirt-relaxed-lifestylegraphy-stylish-and-comfortable-males-fashion-with-a-touch-of-trendiness-free-photo.jpg"
             };
 
             _context.Islemler.Add(islem7);
 
             _context.SaveChanges();
         }
-
-
     }
 }

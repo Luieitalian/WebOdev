@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Adım 2";
+    ViewData["Title"] = "Adım 3";
 }
 @model IEnumerable<CalisanModel>
 
@@ -16,13 +16,8 @@
 <form asp-action="Adim3" method="post">
         <div class="form-group">
             <label for="tarih" class="control-label">Tarih Seçiniz</label>
-            <input type="date" class="form-control" id="tarih" name="tarih" required />
+            <input type="datetime-local" class="form-control" id="tarih" name="tarih" required />
             <div class="invalid-feedback">Tarih alanı gereklidir.</div>
-        </div>
-        <div class="form-group">
-            <label for="saat" class="control-label">Saat Seçiniz</label>
-            <input type="time" class="form-control" id="saat" name="saat" required />
-            <div class="invalid-feedback">Saat alanı gereklidir.</div>
         </div>
 <!-- Devam Butonu -->
     <div class="form-group text-center mt-3">

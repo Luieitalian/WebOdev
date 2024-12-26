@@ -5,26 +5,34 @@ using Microsoft.EntityFrameworkCore;
 using WebOdev.Models;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebOdev.Controllers
 {
     public class RandevuAlController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<KullaniciModel> _userManager;
 
-        public RandevuAlController(ApplicationDbContext context)
+        public RandevuAlController(ApplicationDbContext context, UserManager<KullaniciModel> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult Adim1()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Giris");
+            }
+
             var islemler = _context.Islemler.ToList();
             return View(islemler);
         }
 
         // POST: Adım 1
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Musteri, Calisan")]
         public IActionResult Adim1(int islemId)
         {
             if (!ModelState.IsValid)
@@ -45,6 +53,7 @@ namespace WebOdev.Controllers
             return RedirectToAction("Adim2");
         }
 
+        [Authorize(Roles = "Musteri, Calisan")]
         public IActionResult Adim2()
         {
             var islemId = HttpContext.Session.GetString("IslemId");
@@ -76,7 +85,7 @@ namespace WebOdev.Controllers
         }
 
         // POST: Adım 2
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Musteri, Calisan")]
         public IActionResult Adim2(string calisanId)
         {
             if (!ModelState.IsValid)
@@ -96,13 +105,14 @@ namespace WebOdev.Controllers
             return RedirectToAction("Adim3");
         }
 
+        [Authorize(Roles = "Musteri, Calisan")]
         public IActionResult Adim3()
         {
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Adim3(DateTime tarih, TimeSpan saat)
+        [HttpPost, Authorize(Roles = "Musteri, Calisan")]
+        public IActionResult Adim3(DateTime tarih)
         {
             if (!ModelState.IsValid) {
                 TempData["Message"] = "Model State Geçersiz!";
@@ -126,14 +136,28 @@ namespace WebOdev.Controllers
                 return RedirectToAction("Adim2");
             }
 
+            var calisan = _context.Calisanlar.Include(c => c.Kullanici).FirstOrDefault(c => c.KullaniciId == calisanid);
+            if (calisan == null)
+            {
+                TempData["Message"] = "Çalışan Bulunamadı!";
+                return RedirectToAction("Adim2");
+            }
+
+            var musteri = _context.Musteriler.Include(m => m.Kullanici).FirstOrDefault(m => m.KullaniciId == _userManager.GetUserId(User));
+            if (musteri == null)
+            {
+                TempData["Message"] = "Müşteri Bulunamadı!";
+                return RedirectToAction("Adim2");
+            }
+
             DateTime randevuBaslangicTarihi = tarih;
             DateTime randevuBitisTarihi = tarih + islem.Uzunluk;
 
             var query = from or in _context.OnayliRandevular
                         join randevu in _context.Randevular
                         on or.RandevuId equals randevu.Id
-                        join calisan in _context.Calisanlar
-                        on randevu.CalisanId equals calisan.KullaniciId
+                        join c in _context.Calisanlar
+                        on randevu.CalisanId equals c.KullaniciId
                         select new
                         {
                             randevu.BaslangicTarihi,
@@ -146,13 +170,30 @@ namespace WebOdev.Controllers
                 foreach (var item in list)
                 {
                     if((item.BaslangicTarihi > randevuBaslangicTarihi && randevuBitisTarihi > item.BaslangicTarihi)
-                     || (item.BaslangicTarihi < randevuBaslangicTarihi && item.BitisTarihi > randevuBaslangicTarihi))
+                    || (item.BaslangicTarihi < randevuBaslangicTarihi && item.BitisTarihi > randevuBaslangicTarihi))
                     {
-                        TempData["Message"] = "Randevu Alınmış!";
+                        TempData["Message"] = "Randevu Saatleri Müsait Değil!";
                         return RedirectToAction("Adim3");
                     }
                 }
             }
+
+            RandevuModel randevuModel = new()
+            {
+                Calisan = calisan,
+                CalisanId = calisanid,
+                Musteri = musteri,
+                MusteriId = musteri.KullaniciId,
+                Islem = islem,
+                IslemId = Convert.ToInt32(islemid),
+                IstemTarihi = DateTime.Now,
+                BaslangicTarihi = randevuBaslangicTarihi,
+                BitisTarihi = randevuBitisTarihi,
+                Durum = RandevuModel.RandevuDurum.OnayBekliyor
+            };
+
+            _context.Randevular.Add(randevuModel);
+            _context.SaveChanges();
 
             TempData["Message"] = "Randevu Çalışan Onayına Gönderilmiştir!";
             return RedirectToAction("Randevularim", "Randevu");

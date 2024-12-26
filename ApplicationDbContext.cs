@@ -61,17 +61,29 @@ namespace WebOdev
                 .HasForeignKey<OnayliRandevuModel>(or => or.RandevuId); // FK and PK in OnayliRandevuModel
 
             modelBuilder.Entity<RandevuModel>()
+                .Property(e => e.BaslangicTarihi)
+                .HasColumnType("timestamp without time zone");
+
+            modelBuilder.Entity<RandevuModel>()
+                .Property(e => e.BitisTarihi)
+                .HasColumnType("timestamp without time zone");
+
+            modelBuilder.Entity<RandevuModel>()
+                .Property(e => e.IstemTarihi)
+                .HasColumnType("timestamp without time zone");
+
+            modelBuilder.Entity<RandevuModel>()
                 .HasOne(r => r.Calisan)  // RandevuModel has one Calisan
                 .WithMany()              // CalisanModel can have many RandevuModels
                 .HasForeignKey(r => r.CalisanId); // Foreign Key in RandevuModel
 
             modelBuilder.Entity<RandevuModel>()
-                .HasOne(r => r.Musteri)  // RandevuModel has one Calisan
+                .HasOne(r => r.Musteri)  // RandevuModel has one Musteri
                 .WithMany()              // MusteriModel can have many RandevuModels
                 .HasForeignKey(r => r.MusteriId); // Foreign Key in RandevuModel
 
             modelBuilder.Entity<RandevuModel>()
-                .HasOne(r => r.Islem)  // RandevuModel has one Calisan
+                .HasOne(r => r.Islem)  // RandevuModel has one Islem
                 .WithMany()              // IslemModel can have many RandevuModels
                 .HasForeignKey(r => r.IslemId); // Foreign Key in RandevuModel
 

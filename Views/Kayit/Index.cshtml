@@ -7,6 +7,14 @@
 <form action="@Url.Action("KayitOl", "Kayit")" method="post">
     @Html.AntiForgeryToken()
     <div class="form-group">
+        <label for="isim">İsim</label>
+        <input type="text" id="isim" name="isim" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="soyisim">Soyisim</label>
+        <input type="text" id="soyisim" name="soyisim" class="form-control" required />
+    </div>
+    <div class="form-group">
         <label for="email">Email</label>
         <input type="email" id="email" name="email" class="form-control" required />
     </div>

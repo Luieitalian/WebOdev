@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace WebOdev.Models
 {
@@ -9,7 +10,7 @@ namespace WebOdev.Models
         public string KullaniciId { get; set; }
         public KullaniciModel Kullanici { get; set; }
 
-        [ValidateNever]
+        [ValidateNever, JsonIgnore]
         public ICollection<CalisanIslemModel> CalisanIslemleri { get; set; }
     }
 }
