@@ -1,106 +1,95 @@
 ﻿@model WebOdev.Models.KullaniciEkleViewModel
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="text-center text-light mb-4">@ViewData["Title"]</h2>
 
 <form action="Create" method="post" class="needs-validation" novalidate>
     @Html.AntiForgeryToken()
 
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h4>Çalışan Bilgilerini Girin</h4>
+    <div class="card shadow-sm bg-dark text-light border-0" style="max-width: 600px; margin: auto; transition: transform 0.3s ease-in-out;">
+        <div class="card-header bg-secondary text-center">
+            <h5>Bilgilerinizi Girin</h5>
         </div>
         <div class="card-body">
             <!-- ID Alanını Gizle -->
             <input type="hidden" asp-for="Id" />
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="Isim" class="control-label">İsim</label>
-                        <input asp-for="Isim" class="form-control" id="Isim" placeholder="Ahmet" required />
-                        <div class="invalid-feedback">İsim alanı gereklidir.</div>
-                        <span asp-validation-for="Isim" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="Soyisim" class="control-label">Soyisim</label>
-                        <input asp-for="Soyisim" class="form-control" id="Soyisim" placeholder="Yılmaz" required />
-                        <div class="invalid-feedback">Soyisim alanı gereklidir.</div>
-                        <span asp-validation-for="Soyisim" class="text-danger"></span>
-                    </div>
+            <div class="mb-3">
+                <div class="form-group">
+                    <label for="Isim" class="form-label">İsim</label>
+                    <input asp-for="Isim" class="form-control bg-dark text-light border-light" id="Isim" placeholder="Ahmet" required />
+                    <div class="invalid-feedback">İsim gerekli.</div>
+                    <span asp-validation-for="Isim" class="text-danger"></span>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="Email" class="control-label">Email</label>
-                <input asp-for="Email" type="email" class="form-control" id="Email" placeholder="ahmet@ornek.com" required />
-                <div class="invalid-feedback">Geçerli bir email adresi girin.</div>
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label for="Sifre" class="control-label">Şifre</label>
-                <input asp-for="Sifre" type="password" class="form-control" id="Sifre" placeholder="Şifre" required />
-                <div class="invalid-feedback">Şifre alanı gereklidir.</div>
-                <span asp-validation-for="Sifre" class="text-danger"></span>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="DogumTarihi" class="control-label">Doğum Tarihi</label>
-                        <input asp-for="DogumTarihi" type="date" class="form-control" id="DogumTarihi" required />
-                        <div class="invalid-feedback">Doğum tarihi alanı gereklidir.</div>
-                        <span asp-validation-for="DogumTarihi" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="Telefon" class="control-label">Telefon</label>
-                        <input asp-for="Telefon" type="tel" class="form-control" id="Telefon" placeholder="05551234567" required />
-                        <div class="invalid-feedback">Telefon numarası gereklidir.</div>
-                        <span asp-validation-for="Telefon" class="text-danger"></span>
-                    </div>
+            <div class="mb-3">
+                <div class="form-group">
+                    <label for="Soyisim" class="form-label">Soyisim</label>
+                    <input asp-for="Soyisim" class="form-control bg-dark text-light border-light" id="Soyisim" placeholder="Yılmaz" required />
+                    <div class="invalid-feedback">Soyisim gerekli.</div>
+                    <span asp-validation-for="Soyisim" class="text-danger"></span>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="Cinsiyet" class="control-label">Cinsiyet</label>
-                <select asp-for="Cinsiyet" class="form-control" asp-items="Html.GetEnumSelectList<CinsiyetEnum>()" required>
-                    <option value="">Seçiniz</option>
-                </select>
-                <div class="invalid-feedback">Cinsiyet seçimi gereklidir.</div>
-                <span asp-validation-for="Cinsiyet" class="text-danger"></span>
+            <div class="mb-3">
+                <div class="form-group">
+                    <label for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" type="email" class="form-control bg-dark text-light border-light" id="Email" placeholder="ahmet@ornek.com" required />
+                    <div class="invalid-feedback">Geçerli bir email gerekli.</div>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
             </div>
 
-            <div class="form-group text-center">
-                <button type="submit" class="btn btn-success btn-lg">Çalışanı Kaydet</button>
+            <div class="mb-3">
+                <div class="form-group">
+                    <label for="DogumTarihi" class="form-label">Doğum Tarihi</label>
+                    <input asp-for="DogumTarihi" type="date" class="form-control bg-dark text-light border-light" id="DogumTarihi" required />
+                    <div class="invalid-feedback">Doğum tarihi gerekli.</div>
+                    <span asp-validation-for="DogumTarihi" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="form-group">
+                    <label for="Telefon" class="form-label">Telefon</label>
+                    <input asp-for="Telefon" type="tel" class="form-control bg-dark text-light border-light" id="Telefon" placeholder="05551234567" required />
+                    <div class="invalid-feedback">Telefon gerekli.</div>
+                    <span asp-validation-for="Telefon" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="form-group">
+                    <label for="Cinsiyet" class="form-label">Cinsiyet</label>
+                    <select asp-for="Cinsiyet" class="form-control bg-dark text-light border-light" asp-items="Html.GetEnumSelectList<CinsiyetEnum>()" required>
+                        <option value="">Seçiniz</option>
+                    </select>
+                    <div class="invalid-feedback">Cinsiyet gerekli.</div>
+                    <span asp-validation-for="Cinsiyet" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group text-center mt-4">
+                <button type="submit" class="btn btn-outline-light btn-sm px-4">Kaydet</button>
             </div>
         </div>
     </div>
-
 </form>
 
-<!-- Display Errors -->
-<div asp-validation-summary="All" class="text-danger mt-3"></div>
+<div asp-validation-summary="All" class="text-danger mt-3 text-center"></div>
 
-<a asp-action="Index" class="btn btn-secondary mt-3">Geri Dön</a>
+<a asp-action="Index" class="btn btn-outline-light mt-2 d-block text-center w-50 mx-auto">Geri</a>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @Html.Partial("_ValidationScriptsPartial")
 }
 
-<!-- JavaScript: Bootstrap validation -->
 <script>
-    // Boş alan kontrolü
     (function () {
-        'use strict'
+        'use strict';
         window.addEventListener('load', function () {
             var forms = document.getElementsByClassName('needs-validation');
-            var validation = Array.prototype.filter.call(forms, function (form) {
+            Array.prototype.filter.call(forms, function (form) {
                 form.addEventListener('submit', function (event) {
                     if (form.checkValidity() === false) {
                         event.preventDefault();
@@ -110,6 +99,14 @@
                 }, false);
             });
         }, false);
+
+        // Kart hover animasyonu
+        var card = document.querySelector('.card');
+        card.addEventListener('mouseover', function () {
+            card.style.transform = 'scale(1.05)';
+        });
+        card.addEventListener('mouseout', function () {
+            card.style.transform = 'scale(1)';
+        });
     })();
 </script>
-

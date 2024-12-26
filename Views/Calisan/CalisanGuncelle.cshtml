@@ -1,58 +1,91 @@
-﻿@model WebOdev.Models.KullaniciEkleViewModel
+﻿@model WebOdev.Models.CalisanModel
 
-@{
-    ViewData["Title"] = "Çalışan Güncelle";
-}
+<h2 class="text-center text-light mb-4">@ViewData["Title"]</h2>
 
-<h2>@ViewData["Title"]</h2>
-
-<form method="post">
+<form action="Update" method="post" class="needs-validation" novalidate>
     @Html.AntiForgeryToken()
 
-    <div class="form-group">
-        <label asp-for="Isim" class="control-label">İsim</label>
-        <input asp-for="Isim" class="form-control" />
-        <span asp-validation-for="Isim" class="text-danger"></span>
+    <div class="card shadow-sm bg-dark text-light border-0" style="max-width: 600px; margin: auto; transition: transform 0.3s ease-in-out;">
+        <div class="card-header bg-secondary text-center">
+            <h5>Çalışan Bilgilerini Güncelleyin</h5>
+        </div>
+        <div class="card-body">
+            <!-- Kullanıcı ID Alanını Gizle -->
+            <input type="hidden" asp-for="KullaniciId" />
+
+            <div class="mb-3">
+                <label asp-for="Kullanici.Isim" class="form-label">İsim</label>
+                <input asp-for="Kullanici.Isim" class="form-control bg-dark text-light border-light" placeholder="Ahmet" required />
+                <div class="invalid-feedback">İsim gerekli.</div>
+                <span asp-validation-for="Kullanici.Isim" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Kullanici.Soyisim" class="form-label">Soyisim</label>
+                <input asp-for="Kullanici.Soyisim" class="form-control bg-dark text-light border-light" placeholder="Yılmaz" required />
+                <div class="invalid-feedback">Soyisim gerekli.</div>
+                <span asp-validation-for="Kullanici.Soyisim" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Kullanici.Email" class="form-label">Email</label>
+                <input asp-for="Kullanici.Email" type="email" class="form-control bg-dark text-light border-light" placeholder="ahmet@ornek.com" required />
+                <div class="invalid-feedback">Geçerli bir email gerekli.</div>
+                <span asp-validation-for="Kullanici.Email" class="text-danger"></span>
+            </div>
+
+            @* <div class="mb-3">
+                <label asp-for="Kullanici.Telefon" class="form-label">Telefon</label>
+                <input asp-for="Kullanici.Telefon" class="form-control bg-dark text-light border-light" placeholder="05551234567" required />
+                <div class="invalid-feedback">Telefon gerekli.</div>
+                <span asp-validation-for="Kullanici.Telefon" class="text-danger"></span>
+            </div> *@
+
+            <div class="mb-3">
+                <label asp-for="Kullanici.DogumTarihi" class="form-label">Doğum Tarihi</label>
+                <input asp-for="Kullanici.DogumTarihi" type="date" class="form-control bg-dark text-light border-light" required />
+                <div class="invalid-feedback">Doğum tarihi gerekli.</div>
+                <span asp-validation-for="Kullanici.DogumTarihi" class="text-danger"></span>
+            </div>
+
+            <div class="form-group text-center mt-4">
+                <button type="submit" class="btn btn-outline-light btn-sm px-4">Güncelle</button>
+            </div>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label asp-for="Soyisim" class="control-label">Soyisim</label>
-        <input asp-for="Soyisim" class="form-control" />
-        <span asp-validation-for="Soyisim" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Email" class="control-label">Email</label>
-        <input asp-for="Email" type="email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Telefon" class="control-label">Telefon</label>
-        <input asp-for="Telefon" class="form-control" />
-        <span asp-validation-for="Telefon" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="DogumTarihi" class="control-label">Doğum Tarihi</label>
-        <input asp-for="DogumTarihi" type="date" class="form-control" />
-        <span asp-validation-for="DogumTarihi" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Cinsiyet" class="control-label">Cinsiyet</label>
-        <select asp-for="Cinsiyet" class="form-control" asp-items="Html.GetEnumSelectList<WebOdev.Models.CinsiyetEnum>()">
-            <option value="">Cinsiyet Seçiniz</option>
-        </select>
-        <span asp-validation-for="Cinsiyet" class="text-danger"></span>
-    </div>
-
-
-    <button type="submit" class="btn btn-primary">Güncelle</button>
 </form>
 
-<a href="@Url.Action("Index")" class="btn btn-secondary mt-3">Geri Dön</a>
+<a asp-action="Index" class="btn btn-outline-light mt-3 d-block text-center w-50 mx-auto">Geri Dön</a>
+
+@RenderBody()
 
 @section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
+    @Html.Partial("_ValidationScriptsPartial")
 }
+
+<script>
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            var forms = document.getElementsByClassName('needs-validation');
+            Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+
+        // Kart hover animasyonu
+        var card = document.querySelector('.card');
+        card.addEventListener('mouseover', function () {
+            card.style.transform = 'scale(1.05)';
+        });
+        card.addEventListener('mouseout', function () {
+            card.style.transform = 'scale(1)';
+        });
+    })();
+</script>

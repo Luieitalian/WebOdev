@@ -2,28 +2,64 @@
     ViewData["Title"] = "Kayıt Ol";
 }
 
-<h2>@ViewData["Title"]</h2>
-
-<form action="@Url.Action("KayitOl", "Kayit")" method="post">
-    @Html.AntiForgeryToken()
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" class="form-control" required />
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div id="registerCard" class="card shadow-lg border-0" style="transition: transform 0.3s ease; background-color: #f8f9fa;">
+                <div class="card-body">
+                    <form action="@Url.Action("KayitOl", "Kayit")" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group mb-3">
+                            <label for="email" class="form-label" style="color: #212529;">Email</label>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Email adresinizi girin" required />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="password" class="form-label" style="color: #212529;">Şifre</label>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Şifrenizi girin" required />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="confirmPassword" class="form-label" style="color: #212529;">Şifreyi Onayla</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Şifrenizi tekrar girin" required />
+                        </div>
+                        <button type="submit" class="btn w-100" style="background-color: #343a40; color: #ffffff;">Kayıt Ol</button>
+                    </form>
+                </div>
+                <div class="card-footer text-center" style="background-color: #e9ecef;">
+                    <p style="color: #212529;">Zaten bir hesabınız var mı? <a href="@Url.Action("Index", "Giris")" style="color: #343a40;">Buradan giriş yapabilirsiniz.</a></p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="password">Şifre</label>
-        <input type="password" id="password" name="password" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label for="confirmPassword">Şifreyi Onayla</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required />
-    </div>
-    <button type="submit" class="btn btn-primary">Kayıt Ol</button>
-</form>
 
-<p>
-    Zaten bir hesabınız var mı? <a href="@Url.Action("Index", "Giris")">Buradan giriş yapabilirsiniz.</a>
-</p>
+    <!-- Display Validation Summary (if any) -->
+    @if (ViewData.ModelState.ErrorCount > 0)
+    {
+        <div class="alert alert-danger mt-3">
+            @Html.ValidationSummary(true, "", new { @class = "mb-0" })
+        </div>
+    }
+</div>
 
-<!-- Display Validation Summary (if any) -->
-@Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const registerCard = document.getElementById("registerCard");
+
+        // Büyüme ve küçülme animasyonu için setTimeout
+        setTimeout(() => {
+            registerCard.style.transform = "scale(1.05)";
+        }, 500);
+
+        setTimeout(() => {
+            registerCard.style.transform = "scale(1)";
+        }, 1000);
+
+        // Kullanıcı tıkladığında kartın büyümesini/küçülmesini sağlama
+        registerCard.addEventListener("mouseenter", () => {
+            registerCard.style.transform = "scale(1.05)";
+        });
+
+        registerCard.addEventListener("mouseleave", () => {
+            registerCard.style.transform = "scale(1)";
+        });
+    });
+</script>
