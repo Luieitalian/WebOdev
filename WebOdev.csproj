@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\images\2.png" />
     <Content Remove="wwwroot\images\3b5b7d50b92bb2290361ec37f3ce4cf2.jpg" />
   </ItemGroup>
 
