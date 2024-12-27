@@ -7,7 +7,6 @@
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
         <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
     <div class="carousel-inner" style="height: 400px;">
         <div class="carousel-item active">
@@ -36,6 +35,8 @@
 </div>
 <!-- Slider Sonu -->
 <!-- Kartlar Başlangıç -->
+@if(User.IsInRole("Admin"))
+{
 <div class="container my-5">
     <div class="row">
         <!-- Çalışanlar Kartı -->
@@ -46,7 +47,6 @@
                         <i class="bi bi-people-fill"></i>
                     </div>
                     <h5 class="card-title">Çalışanlar</h5>
-                    <p class="card-text">Ekibimiz hakkında bilgi edinin ve çalışanlarımızı tanıyın.</p>
                 </div>
                 <div class="card-footer">
                     <a asp-controller="Calisan" asp-action="Index" class="btn btn-primary">Daha Fazla</a>
@@ -61,7 +61,6 @@
                         <i class="bi bi-gear-fill"></i>
                     </div>
                     <h5 class="card-title">İşlemler</h5>
-                    <p class="card-text">Yürüttüğümüz işlemler ve sunduğumuz hizmetler hakkında bilgi alın.</p>
                 </div>
                 <div class="card-footer">
                     <a asp-controller="Islem" asp-action="Index" class="btn btn-primary">Daha Fazla</a>
@@ -76,7 +75,6 @@
                         <i class="bi bi-calendar-check-fill"></i>
                     </div>
                     <h5 class="card-title">Randevular</h5>
-                    <p class="card-text">Randevu almak ve yönetmek için gerekli adımları öğrenin.</p>
                 </div>
                 <div class="card-footer">
                     <a asp-controller="Randevu" asp-action="Randevular" class="btn btn-primary">Daha Fazla</a>
@@ -85,6 +83,8 @@
         </div>
     </div>
 </div>
+}
+
 <!-- Kartlar Sonu -->
 
 <h2>Fotoğraf Yükleyerek Saç Modeli Önerisi Al</h2>
