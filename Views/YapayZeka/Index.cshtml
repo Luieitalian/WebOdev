@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="container mt-5">
+    @Html.AntiForgeryToken()
+    <h1 class="text-center mb-4">Fotoğraf Yükleme</h1>
+    <form asp-controller="YapayZeka" asp-action="Gonder" enctype="multipart/form-data">
+        <!-- Fotoğraf Seç -->
+        <div class="mb-3">
+            <label for="photoUpload" class="form-label">Fotoğraf Seç</label>
+            <input type="file" class="form-control" id="photoUpload" name="file" accept="image/*">
+        </div>
+        <!-- Gönder Butonu -->
+        <button type="submit" class="btn btn-primary mt-3 w-100">Yükle</button>
+    </form>
+</div>

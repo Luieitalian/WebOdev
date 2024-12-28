@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,9 +10,16 @@ namespace WebOdev
     {
         public static async Task Main(string[] args)
         {
+
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 100_000_000; // 100 MB
+            });
+
             // Add services to the container.
+            builder.Services.AddHttpClient();
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DBCon")));
@@ -19,6 +27,12 @@ namespace WebOdev
             builder.Services.AddIdentity<KullaniciModel, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.Limits.MaxRequestBodySize = 100_000_000; // 100 MB
+                options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(2); // Increase timeout
+            });
 
             builder.Services.ConfigureApplicationCookie(options =>
             { options.LoginPath = "/Giris/Index"; options.AccessDeniedPath = "/Giris/YetkisizGiris"; });
