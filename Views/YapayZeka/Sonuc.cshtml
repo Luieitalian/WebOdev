@@ -8,5 +8,14 @@
         @TempData["Message"]
     </div>
 }
-
-<p>@TempData["Sonuc"]</p>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">Yapay Zeka Önerisi</h4>
+                <hr>
+                <p>@TempData["Sonuc"]</p>
+            </div>
+        </div>
+    </div>
+</div>
